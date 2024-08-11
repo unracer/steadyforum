@@ -1,0 +1,59 @@
+﻿@model IEnumerable<steadyforum.Server.Model.User>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.uname)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.passwordhash)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.chatlist)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.sessionid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.sessionCreate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.uname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.passwordhash)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.chatlist)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.sessionid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.sessionCreate)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,48 @@
+﻿@model steadyforum.Server.Model.User
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>User</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.uname)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.uname)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.passwordhash)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.passwordhash)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.chatlist)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.chatlist)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.sessionid)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.sessionid)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.sessionCreate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.sessionCreate)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
