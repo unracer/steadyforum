@@ -5,9 +5,10 @@
 - .. progress
 # what for
 - pet proj which out of bounds
-# deploy
-- .. progress
 # devops
+- .. progress
+# deploy
+- if u have PROBLEM WITH VISUAL STUDIO SPA ASP.NET VUE.JS ENTITYFRAMEWORK MIGRATIONS VUE-ROUTE WEB-SOCKET HTTP-REQUEST see how to deploy step by step
 solution > entityframeworkcore > mark for server > install  
 solution > entityframeworkcore.sql > mark for server > install  
 solution > entityframeworkcore.design > mark for server > install  
