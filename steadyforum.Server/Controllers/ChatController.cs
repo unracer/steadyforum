@@ -206,7 +206,7 @@ namespace steadyforum.Server.Controllers
         }
 
         // GET: Chat/Edit/5
-        [HttpGet]
+       /* [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -220,7 +220,7 @@ namespace steadyforum.Server.Controllers
                 return NotFound();
             }
             return View(chat);
-        }
+        }*/
 
         // POST: Chat/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.

@@ -10,12 +10,13 @@ import App from './App.vue'
 import forumpage from './components/forumpage.vue';
 import chatpage from './components/chatpage.vue';
 import shoppage from './components/shoppage.vue';
+import thelogin from './components/thelogin.vue';
 
 const routes = [
     {
         path: '/',
         name: 'root',
-        redirect: '',
+        component: thelogin,
     },
     {
         path: '/Chat',
@@ -26,6 +27,11 @@ const routes = [
         path: '/News',
         name: 'news',
         component: forumpage,
+    },
+    {
+        path: '/Shop',
+        name: 'shop',
+        component: shoppage,
     },
 ]
 

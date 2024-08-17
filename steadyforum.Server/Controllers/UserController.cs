@@ -8,7 +8,7 @@ using steadyforum.Server.Model;
 namespace steadyforum.Server.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
         private readonly steadyforumServerContext _context;
@@ -30,14 +30,14 @@ namespace steadyforum.Server.Controllers
             var user = await _context.User
                 .FirstOrDefaultAsync(m => m.sessionid == sessionid);
 
-            if (user == null || user.sessionCreate < user.sessionCreate.AddDays(1))
+            if (user == null || user.sessionCreate > user.sessionCreate.AddDays(1))
             {
                 // 400
-                return BadRequest("not exist or expired");
+                return BadRequest("{ \"status\" : \"expired\"}");
             }
 
-            // 200
-            return Ok((user.sessionCreate.AddDays(1)) + "day valid");
+            // 200;
+            return Ok("{ \"status\" : \"valid\", \"days\" : " + (user.sessionCreate.AddDays(1))+"}");
         }
 
         // POST: User/Login
@@ -55,9 +55,19 @@ namespace steadyforum.Server.Controllers
                 iterationCount: 100000,
                 numBytesRequested: 256 / 8));
 
-            byte[] bytes;
-            bytes = RandomNumberGenerator.GetBytes(128 / 8);
-            var encodesessionid = Convert.ToBase64String(bytes);
+
+            var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            var stringChars = new char[8];
+            var random = new Random();
+
+            for (int i = 0; i < stringChars.Length; i++)
+            {
+                stringChars[i] = chars[random.Next(chars.Length)];
+            }
+
+            SHA256 mySHA256 = SHA256.Create();
+            var sessionId = mySHA256.ComputeHash(stringChars.Select(c => (byte)c).ToArray());
+            var encodesessionid = System.Convert.ToBase64String(sessionId).TrimEnd('=').Replace('+', '-').Replace('/', '_');
 
             var userfound = await _context
                 .User
@@ -79,7 +89,7 @@ namespace steadyforum.Server.Controllers
                 {
                     _context.Add(valuePast);
                     await _context.SaveChangesAsync();
-                    return Ok("created " + encodesessionid);
+                    return Ok("{ \"status\" : \"created\", \"sessionid\" : \"" + encodesessionid + "\"}");
                 }
             }
             else
@@ -91,7 +101,7 @@ namespace steadyforum.Server.Controllers
 
                 var trackedUser = _context.User.Find(userfound.id);
 
-                if (trackedUser == null) { return BadRequest("ep tvoy maty ya hui znat kak that may be"); }
+                if (trackedUser == null) { return BadRequest("{ \"status\" : \"ep tvoy maty ya hui znat kak that may be\"}"); }
 
                 trackedUser.uname = userfound.uname;
                 trackedUser.passwordhash = userfound.passwordhash;
@@ -101,9 +111,9 @@ namespace steadyforum.Server.Controllers
 
                 _context.SaveChanges();
 
-                return Ok("updated " + encodesessionid);
+                return Ok("{ \"status\" : \"updated\", \"sessionid\" : \"" + encodesessionid + "\"}");
             }
-            return BadRequest("unknown problem id 9587345693");
+            return BadRequest("{ \"status\" : \"fail\"}");
         }
 
         // GET: User/Create

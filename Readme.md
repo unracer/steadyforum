@@ -23,3 +23,4 @@ DBcontext > add like this > protected override void OnModelCreating(ModelBuilder
 DBcontext > add like this > Database.EnsureCreated();  
 optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=steadyforumServerContext-53affff5-4b9a-4b21-bdc1-c3d17508cc0d;Trusted_Connection=True;MultipleActiveResultSets=true;");  
 cmd > dotnet ef migration add init  
+cahnge > proxy: { '^/api': {

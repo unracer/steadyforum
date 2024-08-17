@@ -32,6 +32,7 @@
                 userLoginInput: null,
                 userPasswordInput: null,
                 issessionexpired: true,
+                loginMessage: null,
             };
         },
         created() {
@@ -52,14 +53,14 @@
             },
             async userLogin() {
                 if (this.$cookies.get("acidtrainsession")) {
-                    fetch('User/Details' + this.$cookies.get("acidtrainsession"))
+                    fetch('/api/User/' + this.$cookies.get("steadyforumsessionid"))
                         .then(r => {
                             if (r.code == 400) {
                                 this.issessionexpired = true;
-                            } else if (r == 200) {
+                            } else if (r.code == 200) {
                                 this.issessionexpired = false;
                             }
-                            alert("sessionid is still "+r.json())
+                            alert("session "+r.json())
                             return
                         })
 
@@ -74,7 +75,7 @@
                 var userCredBase64 = btoa(unescape(encodeURIComponent(this.userLoginInput + this.userPasswordInput)));
                 var userCredSha256 = await this.sha256(userCredBase64)
 
-                const requestOptions = {
+                /*const requestOptions = {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(
@@ -83,15 +84,15 @@
                             passwordhash: userCredSha256, // not reqire because can get from session
                         }
                     )
-                };
+                };*/
 
-                fetch('User/Login', requestOptions)
+                fetch('/api/User/'+this.userLoginInput+"/"+userCredSha256)
                     .then(r => r.json())
                     .then(json => {
-                        this.$cookies.remove('aciduname');
-                        this.$cookies.set("aciduname", this.userLoginInput, "expiring time");
-                        this.$cookies.remove('acidtrainsession');                        
-                        this.$cookies.set("acidtrainsession", json, "expiring time")
+                        /*this.$cookies.remove('steadyforumuname');
+                        this.$cookies.set("steadyforumuname", this.userLoginInput, "expiring time");*/
+                        this.$cookies.remove('steadyforumsessionid');                        
+                        this.$cookies.set("steadyforumsessionid", json.sessionid, "expiring time")
                         this.isloginshow = false;                        
                         return;
                     });
