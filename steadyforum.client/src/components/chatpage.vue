@@ -102,13 +102,16 @@
         },
         watch: {
             // call again the method if the route changes
-            '$route': 'fetchData'
+            /*'$route': 'fetchData'*/
+            '$route': 'changechat'
         },
         methods: {
             fetchData(): void {
                 this.post = null;
-                this.loading = true;
-                if (this.oldchatname != this.currentchatname) { this.chatnamechaged = true; this.GetChatContentNotSubscribe(); }               
+                this.loading = true;              
+            }, 
+            changechat() {
+                if (this.oldchatname != this.currentchatname) { this.chatnamechaged = true; this.GetChatContentNotSubscribe(); } 
             },
             chatNew() {
                 // only hide field
@@ -135,31 +138,32 @@
                 }
             },
             async GetChatContentNotSubscribe() { /*Depricated*/
-                while (this.chatnamechaged) {
-                    if (this.pageOnfocus) {
-                        name = this.chatname
-                        if (chatcontent == null) {
-                            id = 0
-                        } else {
-                            id = this.lastid
-                        }
-                        sessionid = this.$cookies.get("acidtrainsession");
+                if (this.chatnamechaged == true) { 
+                    this.chatnamechaged == false
+                    while (this.chatnamechaged == false) {
+                        if (this.pageOnfocus) {
 
-                        fetch('GetChatContentNotSubscribe/' + name + '/' + id + '/' + sessionid)
-                            .then(r => r.json())
-                            .then(json => {
-                                /* this.chatlist = json as Forecasts;*/
-                                this.chatcontent = json;
-                                this.lastid = json.lenght - 1;
-                                alert(json.lenght +"unit of chat content");
-                                this.loading = false;
-                                return;
-                            });
-                        await new Promise(resolve => setTimeout(resolve, 1000)); 
+                            if (chatcontent == null) {
+                                id = 0
+                            } else {
+                                id = this.lastid
+                            }
+
+                            fetch('api/GetChatContentNotSubscribe/' + this.$cookies.get("steadyforumsessionid") + '/' + this.chatname + '/' + id  )
+                                .then(r => r.json())
+                                .then(json => {
+                                    /* this.chatlist = json as Forecasts;*/
+                                    this.chatcontent = json;
+                                    this.lastid = json.lenght - 1;
+                                    alert(json.lenght +"unit of chat content");
+                                    this.loading = false;
+                                    return;
+                                });
+                            await new Promise(resolve => setTimeout(resolve, 1000)); 
+                        }
+                        document.getElementById("chatcontainer").scrollTop = 99999;
                     }
-                    document.getElementById("chatWrapper").scrollTop = 99999;
                 }  
-                this.chatnamechanged = false
             },  
             subscribeChatContent(name) {
                 let sessionid = this.$cookies.get("acidtrainsession");

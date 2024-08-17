@@ -24,12 +24,14 @@ const routes = [
         component: chatpage,
     },
     {
-        path: '/News',
+        path: '/:id',
         name: 'news',
         component: forumpage,
     },
     {
-        path: '/Shop',
+        /*title couse expired link leave amount unlike human-like data*/
+        /*also by title can serach expired goods in other dealers*/
+        path: '/:title', 
         name: 'shop',
         component: shoppage,
     },

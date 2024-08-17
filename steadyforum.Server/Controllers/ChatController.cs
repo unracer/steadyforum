@@ -68,7 +68,7 @@ namespace steadyforum.Server.Controllers
 
         // POST: Chat/ContentOldApi
         [HttpGet("{sessionid}/{chatname}/{lastmessage}")]
-        public async Task<IActionResult> ContentOldApi(string? sessionid, string? chatname, string? lastmessageAsString)
+        public async Task<IActionResult> GetChatContentNotSubscribe(string? sessionid, string? chatname, string? lastmessageAsString)
         {
             if (_context.Chat == null)
             {
