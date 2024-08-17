@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using steadyforum.Server.Data;
 using steadyforum.Server.Model;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace steadyforum.Server.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class ChatController : Controller
+    [Route("api/[controller]")]
+    public class ChatController : ControllerBase
     {
         private readonly steadyforumServerContext _context;
 
@@ -58,9 +60,10 @@ namespace steadyforum.Server.Controllers
                 .Where(s => s.sessionid == sessionid)
                 .FirstOrDefaultAsync();
 
-            if (user == null) { return Problem(" expired session "); }
+            if (user == null) { return BadRequest("{ \"status\" : \" expired session \"} "); }
 
-            return View(user.chatlist);
+            // clear password
+            return Ok("[ "+ (Regex.Replace(user.chatlist, @"\W+key\W+\w+", ""))+" ]");
         }
 
         // POST: Chat/ContentOldApi
@@ -86,12 +89,13 @@ namespace steadyforum.Server.Controllers
                 .Where(s => s.chatname == chatname)
                 .FirstOrDefaultAsync();
 
-            if ( user == null ) { return Problem(" expired session "); }
-            if ( chat == null ) { return Problem(" denied chat or not exist ;) "); }
+            // template to return json Problem("{ \"status\" : \" \"} "); 
+            if ( user == null ) { return BadRequest("{ \"status\" : \"expired session\"} "); }
+            if ( chat == null ) { return BadRequest("{ \"status\" : \"denied chat or not exist ;)\"} "); }
 
             if (!user.chatlist.Contains(chatname) || 
                 !chat.userlist.Contains(user.uname)
-                ) { return Problem(" denied, click <create chat> and login to chat again or call admin"); }
+                ) { return Problem("{ \"status\" : \"denied, click <create chat> and login to chat again or call admin\"} "); }
 
             // check chatname by regexp
 
@@ -109,8 +113,7 @@ namespace steadyforum.Server.Controllers
                     .Where(s => s.chatname == chatname && s.id > lastmessage)
                     .ToListAsync();
             }
-            
-            return BadRequest("invalid arg");
+            return BadRequest("{ \"status\" : \" invalid arg \"} ");
         }
 
         // POST: Chat/Create
@@ -202,7 +205,7 @@ namespace steadyforum.Server.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(chat);
+            return Ok(chat);
         }
 
         // GET: Chat/Edit/5

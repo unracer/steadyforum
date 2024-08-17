@@ -19,7 +19,7 @@ const routes = [
         component: thelogin,
     },
     {
-        path: '/Chat',
+        path: '/:name',
         name: 'chat',
         component: chatpage,
     },

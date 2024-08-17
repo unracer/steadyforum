@@ -52,39 +52,22 @@
                 return hashHex;
             },
             async userLogin() {
-                if (this.$cookies.get("acidtrainsession")) {
+                if (this.$cookies.get("steadyforumsessionid")) {
                     fetch('/api/User/' + this.$cookies.get("steadyforumsessionid"))
-                        .then(r => {
-                            if (r.code == 400) {
-                                this.issessionexpired = true;
-                            } else if (r.code == 200) {
-                                this.issessionexpired = false;
+                        .then(response => {
+                            if (response.status == 400) {
+                                this.isloginshow = true;
+                            } else if (response.status == 200) {
+                                this.isloginshow = false;
                             }
-                            alert("session "+r.json())
                             return
                         })
-
-                    if (!this.issessionexpired) {
-                        this.isloginshow = false;
-                        return;
-                    }    
                 }
 
                 if (!this.userLoginInput) { return }
 
                 var userCredBase64 = btoa(unescape(encodeURIComponent(this.userLoginInput + this.userPasswordInput)));
                 var userCredSha256 = await this.sha256(userCredBase64)
-
-                /*const requestOptions = {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(
-                        {
-                            name: this.userLoginInput,
-                            passwordhash: userCredSha256, // not reqire because can get from session
-                        }
-                    )
-                };*/
 
                 fetch('/api/User/'+this.userLoginInput+"/"+userCredSha256)
                     .then(r => r.json())

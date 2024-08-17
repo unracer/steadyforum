@@ -27,8 +27,9 @@
     }
 
     .background {
-        background-image: url("assets/destuny-background-1.jpg");
+        background-image: url("src/assets/destuny-background-1.jpg");
         /*background-image: url("~@/assets/destuny-background-2.jpg")*/
+        /*background: linear-gradient(160deg, rgb(43 7 0 / 100%) 50%, rgb(43 7 0) 77%);*/
 
         position: absolute;
         height: 100%;
@@ -38,10 +39,6 @@
         filter: blur(10px);
         z-index: -1;
         opacity: 2;
-    }
-
-    body {
-        /*background: linear-gradient(160deg, rgb(43 7 0 / 100%) 50%, rgb(43 7 0) 77%);*/
     }
 
 

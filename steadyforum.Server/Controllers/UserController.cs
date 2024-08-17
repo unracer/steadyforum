@@ -37,7 +37,7 @@ namespace steadyforum.Server.Controllers
             }
 
             // 200;
-            return Ok("{ \"status\" : \"valid\", \"days\" : " + (user.sessionCreate.AddDays(1))+"}");
+            return Ok("{ \"status\" : \"valid\", \"days\" : \"" + (user.sessionCreate.AddDays(1))+"\"}");
         }
 
         // POST: User/Login

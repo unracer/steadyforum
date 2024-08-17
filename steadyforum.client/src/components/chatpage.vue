@@ -25,14 +25,12 @@
     </div>
 
     <div class="chatinfocontainer">
-        <div class="chatinfocard" v-for="chat in chatlist" :key="chat.id">
-            <!--<router-link class="chatname" :to="{name: 'chat', params: { name: chat.name} }">-->
-            <!--<button class="chatname" @click="getChatContent(chat.name)">-->
-            <button class="chatname" @click="currentchatname = chat.name">
-                <img class="chatBackgroundImage" src="../assets/logo.svg" alt="??" />
-            </button>
-        </div>
-        <button class="chatinfocard" @click="chatNew"><img class="chatBackgroundImage" src="../assets/logo.svg" alt="??" /></button>
+        <router-link class="chatinfocard" v-for="chat in chatlist" :key="chat.id" :to="{ name: 'chat', params: { name: chat.name }}">
+            <img class="chatBackgroundImage" src="../assets/logo.svg" alt="??" />
+        </router-link>
+
+        <button class="chatinfocard" @click="chatNew"><!--<img class="chatBackgroundImage" src="../assets/logo.svg" alt="??" />-->+++</button>
+        
         <div class="chatcreate" v-if="chatcreatebutton">
             <form v-on:submit.prevent="onSubmit">
                 <input type="text" id="chatInputName" v-model="chatInputName" placeholder=" chat name" />
@@ -50,33 +48,36 @@
     import { defineComponent } from 'vue';
 
     export default defineComponent({ 
+        components: {
+
+        },
         data(): Data {
             return {
                 loading: false,
                 post: null,
                 chatlist: [
-                    { name: "loading ..", image: "../assets/logo.svg" },
-                    { name: "loading ..", image: "../assets/logo.svg" },
-                    { name: "loading ..", image: "../assets/logo.svg" },
-                    { name: "loading ..", image: "../assets/logo.svg" },
-                    { name: "loading ..", image: "../assets/logo.svg" },
-                    { name: "loading ..", image: "../assets/logo.svg" },
-                    { name: "loading ..", image: "../assets/logo.svg" },
-                    { name: "loading ..", image: "../assets/logo.svg" },
-                    { name: "loading ..", image: "../assets/logo.svg" },
-                    { name: "loading ..", image: "../assets/logo.svg" },
+                    { name: "name ..", image: "../assets/logo.svg" },
+                    { name: "name ..", image: "../assets/logo.svg" },
+                    { name: "name ..", image: "../assets/logo.svg" },
+                    { name: "name ..", image: "../assets/logo.svg" },
+                    { name: "name ..", image: "../assets/logo.svg" },
+                    { name: "name ..", image: "../assets/logo.svg" },
+                    { name: "name ..", image: "../assets/logo.svg" },
+                    { name: "name ..", image: "../assets/logo.svg" },
+                    { name: "name ..", image: "../assets/logo.svg" },
+                    { name: "name ..", image: "../assets/logo.svg" },
                     ],
                 chatcontent: [
-                    { uname: "loading ..", image: "../assets/logo.svg", message: "wait .." },
-                    { uname: "loading ..", image: "../assets/logo.svg", message: "wait .." },
-                    { uname: "loading ..", image: "../assets/logo.svg", message: "wait .." },
-                    { uname: "loading ..", image: "../assets/logo.svg", message: "wait .." },
-                    { uname: "loading ..", image: "../assets/logo.svg", message: "wait .." },
-                    { uname: "loading ..", image: "../assets/logo.svg", message: "wait .." },
-                    { uname: "loading ..", image: "../assets/logo.svg", message: "wait .." },
-                    { uname: "loading ..", image: "../assets/logo.svg", message: "wait .." },
-                    { uname: "loading ..", image: "../assets/logo.svg", message: "wait .." },
-                    { uname: "loading ..", image: "../assets/logo.svg", message: "wait .." },
+                    { uname: "uname ..", image: "../assets/logo.svg", message: "message .." },
+                    { uname: "uname ..", image: "../assets/logo.svg", message: "message .." },
+                    { uname: "uname ..", image: "../assets/logo.svg", message: "message .." },
+                    { uname: "uname ..", image: "../assets/logo.svg", message: "message .." },
+                    { uname: "uname ..", image: "../assets/logo.svg", message: "message .." },
+                    { uname: "uname ..", image: "../assets/logo.svg", message: "message .." },
+                    { uname: "uname ..", image: "../assets/logo.svg", message: "message .." },
+                    { uname: "uname ..", image: "../assets/logo.svg", message: "message .." },
+                    { uname: "uname ..", image: "../assets/logo.svg", message: "message .." },
+                    { uname: "uname ..", image: "../assets/logo.svg", message: "message .." },
                 ],
                 chatcreatebutton: false,
                 sentmessageinput: null,
@@ -86,6 +87,11 @@
                 currentchatname: null,
                 oldchatname: null,
                 chatnamechaged: null,
+
+                chatInputName: null,
+                chatInputKey: null,
+
+                chatError: null,
             };
         },
         created() {
@@ -115,28 +121,18 @@
                 // request by cred
             },
             getChatList() {
-                // from cookie - sessionid
-                // request
-                fetch('chatlist'/*cookie*/)
-                    .then(r => r.json())
-                    .then(json => {
-                       /* this.chatlist = json as Forecasts;*/
-                        this.chatlist = json;
-                        this.loading = false;
-                        return;
-                    });
-            },
-            getChatList() {
-                fetch('GetChatList/' + this.$cookies.get("acidtrainsession"))
+                if (this.$cookies.get("steadyforumsessionid")) { 
+                    fetch('api/Chat/' + this.$cookies.get("steadyforumsessionid"))
                     .then(r => r.json())
                     .then(json => {
                         /* this.chatlist = json as Forecasts;*/
                         this.chatlist = json;
                         this.lastid = json.lenght;
-                        alert(json.lenght + "unit of chat list");
+                        /*alert(Object.keys(json.list).length + " unit of chat list");*/
                         this.loading = false;
                         return;
                     });
+                }
             },
             async GetChatContentNotSubscribe() { /*Depricated*/
                 while (this.chatnamechaged) {
@@ -202,8 +198,8 @@
 
     #msgForm {
         position: fixed;
-        left: 2em;
-        top: 49.0em;
+        left: 1em;
+        /*top: 49.0em;*/
         width: 70%;
     }
 
@@ -296,7 +292,7 @@
     .chatinfocard {
         display: flex;
         height: 50px;
-        width: 200px;
+        width: 100px;
         background-color: #17141d;
         border-radius: 10px;
         box-shadow: -1rem 0 3rem #0000007a;
@@ -304,6 +300,7 @@
         transition: 0.4s ease-out;
         position: relative;
         left: 0px;
+        color: #2c3e50;
     }
     .chatname {
         background-color: #17141d;

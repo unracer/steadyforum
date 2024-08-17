@@ -11,13 +11,13 @@
         <input type="radio" name="slider" id="item-3" checked>
         <div class="slidercards">
             <label class="slidercard" for="item-1" id="sliderforumcard"> <!--what for - check delete id for this-->
-               <!-- <forumpage />-->
+                <forumpage />
             </label>
             <label class="slidercard" for="item-2" id="sliderchatcard">
-                <!--<chatpage/>-->
+                <chatpage/>
             </label>
             <label class="slidercard" for="item-3" id="slidershopcard">
-                <!--<shoppage /> -->
+                <shoppage /> 
             </label>
         </div>
         <div class="player">
@@ -159,7 +159,7 @@
         justify-content: center;
         flex-direction: column;
         align-items: center;
-        overflow: hidden;
+        /*overflow: hidden;*/
     }
 
     .slidercards {

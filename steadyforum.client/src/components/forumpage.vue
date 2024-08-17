@@ -35,7 +35,7 @@
             <!--<img id="newsBackgroundImg" :src="require(`../assets/${news.image}`)" alt="" />-->
             <img id="newsBackgroundImg" src="../assets/Cisco.jpg" alt="" />
             <!--<router-link class="newsContent" :to="{name: 'news', params: { id: news.id}}">-->
-            <router-link class="newsContent">
+            <router-link class="newsContent" to="">
                 {{news.title}}<br />
                 {{news.tag}}<br />
                 {{news.date}}<br />
@@ -75,10 +75,10 @@
         border-radius: 25px;
     }
 
-    a {
+    /*a {
         z-index: 4;
         position: relative;
-    }
+    }*/
 
     #newsWrapper {
         height: 100%;
