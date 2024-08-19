@@ -36,9 +36,9 @@ namespace steadyforum.Server.Migrations
                     b.Property<string>("Uname")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("idcontent")
+                    b.Property<int>("idcontent")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("int");
 
                     b.HasKey("id");
 
@@ -53,15 +53,6 @@ namespace steadyforum.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
-                    b.Property<DateOnly>("Date")
-                        .HasColumnType("date");
-
-                    b.Property<DateOnly>("Readed")
-                        .HasColumnType("date");
-
-                    b.Property<string>("Uname")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("chatname")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -70,9 +61,6 @@ namespace steadyforum.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("message")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("passwordhash")
                         .IsRequired()
@@ -87,13 +75,26 @@ namespace steadyforum.Server.Migrations
                     b.ToTable("Chat", (string)null);
                 });
 
-            modelBuilder.Entity("steadyforum.Server.Model.Content", b =>
+            modelBuilder.Entity("steadyforum.Server.Model.Chatcontent", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<int>("idcontent")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("date");
+
+                    b.Property<DateOnly>("Readed")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Uname")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("geo")
                         .IsRequired()
@@ -109,7 +110,7 @@ namespace steadyforum.Server.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("Content", (string)null);
+                    b.ToTable("Chatcontent", (string)null);
                 });
 
             modelBuilder.Entity("steadyforum.Server.Model.News", b =>

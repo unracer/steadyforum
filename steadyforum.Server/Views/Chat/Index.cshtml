@@ -13,28 +13,16 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Readed)
+                @Html.DisplayNameFor(model => model.Chatname)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Date)
+                @Html.DisplayNameFor(model => model.Passwordhash)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Uname)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.chatname)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.passwordhash)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.userlist)
+                @Html.DisplayNameFor(model => model.Userlist)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.idcontent)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.message)
             </th>
             <th></th>
         </tr>
@@ -43,28 +31,16 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Readed)
+                @Html.DisplayFor(modelItem => item.Chatname)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Date)
+                @Html.DisplayFor(modelItem => item.Passwordhash)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Uname)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.chatname)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.passwordhash)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.userlist)
+                @Html.DisplayFor(modelItem => item.Userlist)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.idcontent)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.message)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |

@@ -3,11 +3,11 @@ namespace steadyforum.Server.Model
     public class User
     {
         public int id { get; set; }
-        public string uname { get; set; }
-        public string passwordhash { get; set; }
-        public string chatlist { get; set; }
-        public string sessionid { get; set; }
-        public DateTime sessionCreate { get; set; }
+        public string? Uname { get; set; }
+        public string? Passwordhash { get; set; }
+        public string? Chatlist { get; set; }
+        public string? Sessionid { get; set; }
+        public DateTime SessionCreate { get; set; }
 
         // dont know how to request data from db from model (here) but easy bussines logic code can transfer
         public void getChatList(string sessionid)

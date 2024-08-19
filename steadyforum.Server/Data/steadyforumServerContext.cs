@@ -12,7 +12,8 @@ namespace steadyforum.Server.Data
         public steadyforumServerContext (DbContextOptions<steadyforumServerContext> options)
             : base(options)
         {
-            Database.EnsureCreated();
+            /*Database.EnsureDelete();*/
+            /*Database.EnsureCreated();*/
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -24,7 +25,7 @@ namespace steadyforum.Server.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Chat>().ToTable("Chat");
-            modelBuilder.Entity<Content>().ToTable("Content");
+            modelBuilder.Entity<Chatcontent>().ToTable("Content");
             modelBuilder.Entity<User>().ToTable("User");
             modelBuilder.Entity<Advertise>().ToTable("Advertise");
             modelBuilder.Entity<News>().ToTable("News");
@@ -33,7 +34,7 @@ namespace steadyforum.Server.Data
         }
 
         public DbSet<steadyforum.Server.Model.Chat> Chat { get; set; } = default!;
-        public DbSet<steadyforum.Server.Model.Content> Content { get; set; } = default!;
+        public DbSet<steadyforum.Server.Model.Chatcontent> Chatcontent { get; set; } = default!;
         public DbSet<steadyforum.Server.Model.User> User { get; set; } = default!;
         public DbSet<steadyforum.Server.Model.Advertise> Advertise { get; set; } = default!;
         public DbSet<steadyforum.Server.Model.News> News { get; set; } = default!;

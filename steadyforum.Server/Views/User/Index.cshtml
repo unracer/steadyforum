@@ -13,19 +13,19 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.uname)
+                @Html.DisplayNameFor(model => model.Uname)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.passwordhash)
+                @Html.DisplayNameFor(model => model.Passwordhash)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.chatlist)
+                @Html.DisplayNameFor(model => model.Chatlist)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.sessionid)
+                @Html.DisplayNameFor(model => model.Sessionid)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.sessionCreate)
+                @Html.DisplayNameFor(model => model.SessionCreate)
             </th>
             <th></th>
         </tr>
@@ -34,19 +34,19 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.uname)
+                @Html.DisplayFor(modelItem => item.Uname)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.passwordhash)
+                @Html.DisplayFor(modelItem => item.Passwordhash)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.chatlist)
+                @Html.DisplayFor(modelItem => item.Chatlist)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.sessionid)
+                @Html.DisplayFor(modelItem => item.Sessionid)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.sessionCreate)
+                @Html.DisplayFor(modelItem => item.SessionCreate)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |

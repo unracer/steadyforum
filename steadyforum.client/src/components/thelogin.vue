@@ -53,7 +53,7 @@
             },
             async userLogin() {
                 if (this.$cookies.get("steadyforumsessionid")) {
-                    fetch('/api/User/' + this.$cookies.get("steadyforumsessionid"))
+                    fetch('/api/Details/' + this.$cookies.get("steadyforumsessionid"))
                         .then(response => {
                             if (response.status == 400) {
                                 this.isloginshow = true;
@@ -69,7 +69,7 @@
                 var userCredBase64 = btoa(unescape(encodeURIComponent(this.userLoginInput + this.userPasswordInput)));
                 var userCredSha256 = await this.sha256(userCredBase64)
 
-                fetch('/api/User/'+this.userLoginInput+"/"+userCredSha256)
+                fetch('/api/Login/'+this.userLoginInput+"/"+userCredSha256)
                     .then(r => r.json())
                     .then(json => {
                         /*this.$cookies.remove('steadyforumuname');

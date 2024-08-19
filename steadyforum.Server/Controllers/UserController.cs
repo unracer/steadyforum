@@ -8,7 +8,8 @@ using steadyforum.Server.Model;
 namespace steadyforum.Server.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    /*[Route("api/[controller]")]*/
+    [Route("api/")]
     public class UserController : ControllerBase
     {
         private readonly steadyforumServerContext _context;
@@ -19,7 +20,7 @@ namespace steadyforum.Server.Controllers
         }
 
         // GET: User/Details/5
-        [HttpGet("{sessionid}")]
+        [HttpGet("Details/{sessionid}")]
         public async Task<IActionResult> Details(string? sessionid)
         {
             if (sessionid == null)
@@ -28,20 +29,20 @@ namespace steadyforum.Server.Controllers
             }
 
             var user = await _context.User
-                .FirstOrDefaultAsync(m => m.sessionid == sessionid);
+                .FirstOrDefaultAsync(m => m.Sessionid == sessionid);
 
-            if (user == null || user.sessionCreate > user.sessionCreate.AddDays(1))
+            if (user == null || user.SessionCreate > user.SessionCreate.AddDays(1))
             {
                 // 400
                 return BadRequest("{ \"status\" : \"expired\"}");
             }
 
             // 200;
-            return Ok("{ \"status\" : \"valid\", \"days\" : \"" + (user.sessionCreate.AddDays(1))+"\"}");
+            return Ok("{ \"status\" : \"valid\", \"days\" : \"" + (user.SessionCreate.AddDays(1))+"\"}");
         }
 
         // POST: User/Login
-        [HttpGet("{name}/{passwordhash}")]
+        [HttpGet("Login/{name}/{passwordhash}")]
         public async Task<IActionResult> Login(string name, string passwordhash)
         {
             // double hash
@@ -71,18 +72,18 @@ namespace steadyforum.Server.Controllers
 
             var userfound = await _context
                 .User
-                .Where(m => m.uname == name)
+                .Where(m => m.Uname == name)
                 .FirstOrDefaultAsync();
 
             if (userfound == null)
             {
                 var valuePast = new User
                 {
-                    uname = name,
-                    passwordhash = hashed,
-                    chatlist = "faq : keynone ", // exclude <space> from chatname/key in chatcreateController
-                    sessionid = encodesessionid,
-                    sessionCreate = new DateTime()
+                    Uname = name,
+                    Passwordhash = hashed,
+                    Chatlist = "faq : keynone ", // exclude <space> from chatname/key in chatcreateController
+                    Sessionid = encodesessionid,
+                    SessionCreate = new DateTime()
                 };
 
                 if (ModelState.IsValid)
@@ -94,7 +95,7 @@ namespace steadyforum.Server.Controllers
             }
             else
             {
-                if (userfound.passwordhash != hashed)
+                if (userfound.Passwordhash != hashed)
                 {
                     return Ok(userfound.id); 
                 }
@@ -103,11 +104,11 @@ namespace steadyforum.Server.Controllers
 
                 if (trackedUser == null) { return BadRequest("{ \"status\" : \"ep tvoy maty ya hui znat kak that may be\"}"); }
 
-                trackedUser.uname = userfound.uname;
-                trackedUser.passwordhash = userfound.passwordhash;
-                trackedUser.chatlist = userfound.chatlist;
-                trackedUser.sessionid = encodesessionid;
-                trackedUser.sessionCreate = new DateTime();
+                trackedUser.Uname = userfound.Uname;
+                trackedUser.Passwordhash = userfound.Passwordhash;
+                trackedUser.Chatlist = userfound.Chatlist;
+                trackedUser.Sessionid = encodesessionid;
+                trackedUser.SessionCreate = new DateTime();
 
                 _context.SaveChanges();
 

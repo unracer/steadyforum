@@ -311,6 +311,5 @@
         box-shadow: 0px 0px 100px 0px rgb(0 0 0);
         border-radius: 10px;
         object-fit: cover;
-        color: #ff6c00;
     }
 </style>

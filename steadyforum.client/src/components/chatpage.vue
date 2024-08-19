@@ -19,7 +19,7 @@
         <form class="form" id="msgForm" ref="msgFormRef" v-on:submit.prevent="onSubmit">
             <input type="text" class="chatmessageinput" v-model="sentmessageinput" />
             <input type="submit" class="chatmessageinput" @click="msgSend" style="display: none" />
-            <a class="cursorimage">></a>
+            <a class="cursorchat">></a>
             <label class="cursor"></label>
         </form>
     </div>
@@ -125,7 +125,7 @@
             },
             getChatList() {
                 if (this.$cookies.get("steadyforumsessionid")) { 
-                    fetch('api/Chat/' + this.$cookies.get("steadyforumsessionid"))
+                    fetch('api/List/' + this.$cookies.get("steadyforumsessionid"))
                     .then(r => r.json())
                     .then(json => {
                         /* this.chatlist = json as Forecasts;*/
@@ -137,7 +137,11 @@
                     });
                 }
             },
-            async GetChatContentNotSubscribe() { /*Depricated*/
+            async LoginChat(){
+
+
+            },
+            async GetChatContentNonWs() { /*Depricated*/
                 if (this.chatnamechaged == true) { 
                     this.chatnamechaged == false
                     while (this.chatnamechaged == false) {
@@ -149,7 +153,7 @@
                                 id = this.lastid
                             }
 
-                            fetch('api/GetChatContentNotSubscribe/' + this.$cookies.get("steadyforumsessionid") + '/' + this.chatname + '/' + id  )
+                            fetch('api/Chat/' + this.$cookies.get("steadyforumsessionid") + '/' + this.chatname + '/' + id  )
                                 .then(r => r.json())
                                 .then(json => {
                                     /* this.chatlist = json as Forecasts;*/
@@ -165,6 +169,41 @@
                     }
                 }  
             },  
+             async PostChatContentNonWs() { /*Depricated*/
+                let dateNow = new Date();
+                const requestOptionsPost = {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            
+                              /*"id": 0,*/
+                              /*"idcontent": 0,*/
+                              /*"readed": {
+                                "year": 0,
+                                "month": 0,
+                                "day": 0,
+                                "dayOfWeek": 0
+                              },*/
+                              "date": {
+                                "year": dateNow.getFullYear(),
+                                "month": dateNow.getMonth(),
+                                "day": dateNow.getDate(),
+                                "dayOfWeek": 0
+                              },
+                              "uname": "string",
+                              "text": "string",
+                              /*"mediapath": "string",*/
+                              /*"geo": "string"*/                            
+                        })
+                    };
+
+                fetch('api/Chat/', requestOpions  )
+                    .then(r => r.json())
+                    .then(json => {
+                        alert(json);
+                        return;
+                    });    
+             }, 
             subscribeChatContent(name) {
                 let sessionid = this.$cookies.get("acidtrainsession");
         
@@ -198,6 +237,10 @@
 <style>
     .inputContainer {
         height: 5%;
+    }
+
+    .cursorchat {
+        color: lightseagreen;
     }
 
     #msgForm {

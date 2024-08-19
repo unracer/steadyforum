@@ -24,7 +24,9 @@ const routes = [
         component: chatpage,
     },
     {
-        path: '/:id',
+        /*title couse expired link leave amount unlike human-like data*/
+        /*also by title can serach expired goods in other dealers*/
+        path: '/:titleid',
         name: 'news',
         component: forumpage,
     },

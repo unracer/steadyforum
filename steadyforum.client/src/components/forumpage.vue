@@ -16,16 +16,16 @@
 
         -->
 
-    <div v-if="newslist" class="loading">
+    <!--<div v-if="newslist" class="loading">-->
         <!-- make random and add second game -->
-        Loading... Please  <a href="https://mrdoob.com/projects/chromeexperiments/google-gravity/">play with me</a> <!--for more fun.-->
-    </div>
+        <!--Loading... Please  <a href="https://mrdoob.com/projects/chromeexperiments/google-gravity/">play with me</a>--> <!--for more fun.-->
+    <!--</div>-->
 
     <div class="newssearch">
         <form class="form" ref="msgFormRef" v-on:submit.prevent="onSubmit">
             <input type="text" class="newssearchinput" v-model="sentmessageinput" value="oppo realme ram 8gb cam 120mpx " placeholder="searching .." />
             <input type="submit" class="newssearchinput" @click="msgSend" style="display: none" />
-            <a class="cursorimage">></a>
+            <a class="cursornews">></a>
             <label class="cursor"></label>
         </form>
     </div>
@@ -35,7 +35,7 @@
             <!--<img id="newsBackgroundImg" :src="require(`../assets/${news.image}`)" alt="" />-->
             <img id="newsBackgroundImg" src="../assets/Cisco.jpg" alt="" />
             <!--<router-link class="newsContent" :to="{name: 'news', params: { id: news.id}}">-->
-            <router-link class="newsContent" to="">
+            <router-link class="newsContent" :to="{ name: 'news', params: { titleid: news.title }}">
                 {{news.title}}<br />
                 {{news.tag}}<br />
                 {{news.date}}<br />
@@ -82,7 +82,7 @@
             // fetch the data when the view is created and the data is
             // already being observed
             /*this.fetchData();*/
-            loadsubscribedchannelpost();
+            this.loadsubscribedchannelpost();
         },
         watch: {
             // call again the method if the route changes
@@ -137,12 +137,16 @@
         width: 100%;
     }
 
+    .cursornews{
+        color: red;
+    }
+
     #newsBackgroundImg {
         height: 10em;
         width: 100%;
         object-fit: cover;
         opacity: 0.2;
-        z-index: 2;
+        z-index: -1;
         position: absolute;
         padding: 0.5em;
         border-radius: 25px;

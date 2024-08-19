@@ -9,21 +9,27 @@
 
         <div style="height: 45%; height: 400px; margin: 1em; overflow: hidden;">
             <div class="shopcarousel">
-                <router-link :to="{ name: 'shop', params: { name: shopunit.id }}" @onclick="startFastPaymentSystem" v-for="shopunit in shopcarousellist" :key="shopunit.id"><img src="../assets/logo.svg" alt="unit carousel" /><p class="shopcarouselunit">{{shopunit.title}}</p></router-link>
+                <!--<div class="shopcarouselunit"><img src="../assets/logo.svg" alt="unit carousel" /><p></p></div>-->
+                <div class="shopcarouselunit" v-for="shopunit in shopcarousellist" :key="shopunit.id">
+                    <router-link :to="{ name: 'shop', params: { title: shopunit.title }}" @click="startFastPaymentSystem(shopunit.id)">
+                        <img src="../assets/logo.svg" alt="unit carousel" />
+                        <a style="top: -4em; position: relative; padding: 1em;  color: coral; box-shadow: 0px 0px 100px 0px rgb(0 0 0); background-color: rgb(165 165 165 / 38%); }">{{shopunit.title}}</a>
+                    </router-link>
+                </div>
             </div>
         </div>
 
         <div class="productsearch">
             <form class="form"  ref="msgFormRef" v-on:submit.prevent="onSubmit">
-                <input type="text" class="unitsearchinput" v-model="sentmessageinput" value="oppo realme ram 8gb cam 120mpx " placeholder="searching .."/>
+                <input type="text" class="unitsearchinput" v-model="sentmessageinput" placeholder="searching .."/>
                 <input type="submit" class="unitsearchinput" @click="msgSend" style="display: none" />
-                <a class="cursorimage">></a>
+                <a class="cursorshop">></a>
                 <label class="cursor"></label>
             </form>
         </div>
 
         <div class="productpredict">
-            <div class="predictTile" v-for="hintunit in productpredictlist" :key="hintunit.title">{{hintunit.title}}</div>
+            <div class="predictTile" v-for="hintunit in productpredictlist" :key="hintunit.title" @click="predictPast(hintunit.title)">{{hintunit.title}}</div>
         </div>
 </template>
 
@@ -36,40 +42,49 @@
                 loading: false,
                 shopcarousellist: [
                     { id: 0, title: "steady Merch steack..", image: "../assets/logo.svg" },
-                    { id: 0, title: "steady Merch hoodie ..", image: "../assets/logo.svg" },
-                    { id: 0, title: "steady Merch quadrocopter pack ..", image: "../assets/logo.svg" },
-                    { id: 0, title: "steady Merch hardware pack ..", image: "../assets/logo.svg" },
-                    { id: 0, title: "steady Merch software pack ..", image: "../assets/logo.svg" },
-                    { id: 0, title: "steady Merch phone ..", image: "../assets/logo.svg" },
+                    { id: 1, title: "steady Merch hoodie ..", image: "../assets/logo.svg" },
+                    { id: 2, title: "steady Merch quadrocopter pack ..", image: "../assets/logo.svg" },
+                    { id: 3, title: "steady Merch hardware pack ..", image: "../assets/logo.svg" },
+                    { id: 4, title: "steady Merch software pack ..", image: "../assets/logo.svg" },
+                    { id: 5, title: "steady Merch phone ..", image: "../assets/logo.svg" },
                 ],
                 productpredictlist: [
-                    { title: "Predict ..", link: "wait .." },
-                    { title: "cat ..", link: "wait .." },
-                    { title: "road ..", link: "wait .." },
-                    { title: "xss ..", link: "wait .." },
-                    { title: "amazing ..", link: "wait .." },
-                    { title: "steady ..", link: "wait .." },
-                    { title: "small ..", link: "wait .." },
-                    { title: "red ..", link: "wait .." },
-                    { title: "Predict ..", link: "wait .." },
-                    { title: "cat ..", link: "wait .." },
-                    { title: "road ..", link: "wait .." },
-                    { title: "xss ..", link: "wait .." },
-                    { title: "amazing ..", link: "wait .." },
-                    { title: "steady ..", link: "wait .." },
-                    { title: "small ..", link: "wait .." },
-                    { title: "red ..", link: "wait .." },
-                    { title: "Predict ..", link: "wait .." },
-                    { title: "cat ..", link: "wait .." },
-                    { title: "road ..", link: "wait .." },
-                    { title: "xss ..", link: "wait .." },
-                    { title: "amazing ..", link: "wait .." },
-                    { title: "steady ..", link: "wait .." },
-                    { title: "small ..", link: "wait .." },
-                    { title: "red ..", link: "wait .." },
+                    { title: "Predict:", link: "wait .." },
+                    { title: "cat", link: "wait .." },
+                    { title: "road", link: "wait .." },
+                    { title: "xss", link: "wait .." },
+                    { title: "amazing", link: "wait .." },
+                    { title: "steady", link: "wait .." },
+                    { title: "small", link: "wait .." },
+                    { title: "red", link: "wait .." },
+                    { title: "Predict", link: "wait .." },
+                    { title: "cat", link: "wait .." },
+                    { title: "road", link: "wait .." },
+                    { title: "xss", link: "wait .." },
+                    { title: "amazing", link: "wait .." },
+                    { title: "steady", link: "wait .." },
+                    { title: "small", link: "wait .." },
+                    { title: "red", link: "wait .." },
+                    { title: "Predict", link: "wait .." },
+                    { title: "cat", link: "wait .." },
+                    { title: "road", link: "wait .." },
+                    { title: "xss", link: "wait .." },
+                    { title: "amazing", link: "wait .." },
+                    { title: "steady", link: "wait .." },
+                    { title: "small", link: "wait .." },
+                    { title: "red", link: "wait .." },
+                    { title: "Predict", link: "wait .." },
+                    { title: "cat", link: "wait .." },
+                    { title: "road", link: "wait .." },
+                    { title: "xss", link: "wait .." },
+                    { title: "amazing", link: "wait .." },
+                    { title: "steady", link: "wait .." },
+                    { title: "small", link: "wait .." },
+                    { title: "red", link: "wait .." },
+                    { title: "Predict", link: "wait .." },
                 ],
                 chatcreatebutton: false,
-                sentmessageinput: null,
+                sentmessageinput: "oppo realme ram 8gb cam 120mpx ",
             };
         },
         created() {
@@ -124,13 +139,16 @@
                 const baseUrl = " ht https://sbp1.metib.ru ";
                 /*https://qr.nspk.ru/AS100001ORTF4GAF80KPJ53K186D9A3G?type=01&bank=100000000007&crc=0C8A*/
                 /*eu payment system https://qna.habr.com/q/289047*/
-                var elements = stripe.elements({
+                /*var elements = stripe.elements({
                     mode: 'payment',
                     currency: 'usd',
                     amount: 1099,
-                });
+                });*/
                 /*anon payment system https://habr.com/ru/articles/350430/*/
-            }
+            },
+            predictPast(title){
+                this.sentmessageinput += " " + title;
+            },
         },
     });
 </script>
@@ -149,9 +167,9 @@
     }
 
     .shopcarousel {
-        width: 400px;
+        width: 800px;
         height: 100vw;
-        transform: rotate(-90deg) translateY(-400px);
+        transform: rotate(-90deg) translateY(-800px);
         transform-origin: top right;
         overflow-x: hidden;
         overflow-y: auto;
@@ -160,7 +178,7 @@
         .shopcarousel div {
             padding: 1em;
             position: relative;
-            width: 100%;
+            width: 50%;
             height: 400px;
             transform: rotate(90deg);
             margin: 10px 0;
@@ -173,7 +191,7 @@
     .shopcarouselunit {
         padding: 10px;
         position: absolute;
-        top: 50%;
+        /* top: 50%; */
         left: 50%;
         transform: translate(-50%, -50%);
     }
@@ -195,8 +213,13 @@
         padding: 1em;
         width: 100%;
     }
+    .cursorshop{
+        color: coral;
+    }
 
-/*predict*/
+
+
+    /*predict*/
     .productpredict {
         padding: 1em;
         height: 45%;
@@ -208,6 +231,7 @@
         display: inline-block;
         margin: 0.5em;
         padding: 0.5em;
+        color: coral;
     }
 
 </style>
