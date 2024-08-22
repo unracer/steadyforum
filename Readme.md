@@ -1,3 +1,9 @@
+
+
+
+https://github.com/user-attachments/assets/22e33a13-0245-46c0-81c2-3d892621a8c8
+
+
 # what you get if research
 - comfortable ui/ux for everyday witch must be at all messendgers
 - 'must have' backend systems like telegram (in progress)
