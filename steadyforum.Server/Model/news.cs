@@ -8,8 +8,7 @@ namespace steadyforum.Server.Model
         public int id { get; set; }
         public DateOnly Date { get; set; }
         public string? Uname { get; set; }
-
-
+       /* public int? idcontent { get; set; }*/
         public bool exist(int id) { return false; }
     }
 }

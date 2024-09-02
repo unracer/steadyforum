@@ -2,27 +2,32 @@
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using steadyforum.Server.Data;
 using steadyforum.Server.Model;
 
 namespace steadyforum.Server.Controllers
 {
     [ApiController]
+    /*[Route("api/[controller]")]*/
     [Route("api/")]
-    public class UserController : ControllerBase
+    public class ShopController : ControllerBase
     {
         private readonly steadyforumServerContext _context;
 
-        public UserController(steadyforumServerContext context)
+        public ShopController(steadyforumServerContext context)
         {
             _context = context;
         }
 
         // GET: User/Details/5
-        [HttpGet("Details/{sessionid}")]
-        public async Task<IActionResult> Details(string? sessionid)
+        [HttpGet("Details/{sessionid}/{transactiontrackid}")]
+        public async Task<IActionResult> Details(string? sessionid, string? transactiontrackid)
         {
-            if (sessionid == null)
+
+            // after payment request track to payment system gatway
+
+            /*if (sessionid == null)
             {
                 return NotFound();
             }
@@ -34,14 +39,14 @@ namespace steadyforum.Server.Controllers
             {
                 // 400
                 return BadRequest("{ \"status\" : \"expired\"}");
-            }
+            }*/
 
             // 200;
-            return Ok("{ \"status\" : \"valid\", \"days\" : \"" + (user.SessionCreate.AddDays(1))+"\"}");
+            return Ok("{ \"status\" : \"???\", \"days\" : \"" + "" +"\"}");
         }
 
         // POST: User/Login
-        [HttpGet("Login/{name}/{passwordhash}")]
+        /*[HttpGet("Login/{name}/{passwordhash}")]
         public async Task<IActionResult> Login(string name, string passwordhash)
         {
             // double hash
@@ -101,20 +106,20 @@ namespace steadyforum.Server.Controllers
 
                 var trackedUser = _context.User.Find(userfound.id);
 
-                    if (trackedUser == null) { return BadRequest("{ \"status\" : \"ep tvoy maty ya hui znat kak that may be\"}"); }
+                if (trackedUser == null) { return BadRequest("{ \"status\" : \"ep tvoy maty ya hui znat kak that may be\"}"); }
 
-                    trackedUser.Uname = userfound.Uname;
-                    trackedUser.Passwordhash = userfound.Passwordhash;
-                    trackedUser.Chatlist = userfound.Chatlist;
-                    trackedUser.Sessionid = encodesessionid;
-                    trackedUser.SessionCreate = new DateTime();
+                trackedUser.Uname = userfound.Uname;
+                trackedUser.Passwordhash = userfound.Passwordhash;
+                trackedUser.Chatlist = userfound.Chatlist;
+                trackedUser.Sessionid = encodesessionid;
+                trackedUser.SessionCreate = new DateTime();
 
-                    _context.SaveChanges();
+                _context.SaveChanges();
 
                 return Ok("{ \"status\" : \"updated\", \"sessionid\" : \"" + encodesessionid + "\"}");
             }
             return BadRequest("{ \"status\" : \"fail\"}");
-        }
+        }*/
 
         // GET: User/Create
         /* public IActionResult Create()
@@ -122,22 +127,63 @@ namespace steadyforum.Server.Controllers
              return Ok();
          }*/
 
-        // POST: User/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        /*[HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,uname,passwordhash,chatlist,sessionid,sessionCreate")] User user)
+        // POST: User/Order
+        [HttpPost]
+        public async Task<IActionResult> Order(string SessionId, int? UnitId, string? externalLink)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(user);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return Ok(user);
-        }*/
 
+            /* strict recomend use 5post or alternate*/
+
+            if (_context.User == null || _context.Chat == null)
+            {
+                return NotFound("null arg");
+            }
+
+            if (externalLink != null)
+            {
+                return Redirect(externalLink);
+            }
+            else if (UnitId != null)
+            {
+                var user = await _context
+                .User
+                .Where(s => s.Sessionid == SessionId)
+                .FirstOrDefaultAsync();
+                if (user == null) { return BadRequest(" expired session "); }
+
+                var shopunit = await _context
+                    .Shop
+                    .Where(s => s.Unitid == UnitId)
+                    .FirstOrDefaultAsync();
+                    if (shopunit == null || shopunit.IsSale == false) { return BadRequest(" cant order "); }
+
+                // 5post integration
+
+            }
+            return BadRequest("strict recomend use 5post");
+        }
+
+        [HttpPost]
+        /*[ValidateAntiForgeryToken]*/
+        public async Task<IActionResult> Search(string SessionId, string wishline )
+        {
+
+            /* strict recomend use 5post or alternate*/
+
+            if (_context.User == null || _context.Chat == null)
+            {
+                return NotFound("null arg");
+            }
+
+            // search 
+
+            var response = "{" +
+                "\"unit\":\"[]\"," +
+                "\"predict\":\"[]\"," +
+                "}";
+
+            return Ok(response);
+        }
         // GET: User/Edit/5
         /* public async Task<IActionResult> Edit(int? id)
          {

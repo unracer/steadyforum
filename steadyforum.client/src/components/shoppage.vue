@@ -5,13 +5,15 @@
         нижняя 50% предпочтения (дешевле/дороже, важность камеры, важность процессора, батареи и тд..)
 
         алгоритм поиска по магазам типа е каталог
+
+        е-каталог фареве
         -->
 
         <div style="height: 45%; height: 400px; margin: 1em; overflow: hidden;">
             <div class="shopcarousel">
                 <!--<div class="shopcarouselunit"><img src="../assets/logo.svg" alt="unit carousel" /><p></p></div>-->
                 <div class="shopcarouselunit" v-for="shopunit in shopcarousellist" :key="shopunit.id">
-                    <router-link :to="{ name: 'shop', params: { title: shopunit.title }}" @click="startFastPaymentSystem(shopunit.id)">
+                    <router-link :to="{ name: 'shop', params: { title: shopunit.title }}" @click="runPaymentSystem(shopunit.id)">
                         <img src="../assets/logo.svg" alt="unit carousel" />
                         <a style="top: -4em; position: relative; padding: 1em;  color: coral; box-shadow: 0px 0px 100px 0px rgb(0 0 0); background-color: rgb(165 165 165 / 38%); }">{{shopunit.title}}</a>
                     </router-link>
@@ -134,17 +136,11 @@
 
 
             },
-            startFastPaymentSystem(id) {
-                /*rus payment system https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://metib.online/docs/%25D0%259A%25D0%25B0%25D0%25BA%2520%25D1%2583%25D1%2581%25D1%2582%25D0%25B0%25D0%25BD%25D0%25BE%25D0%25B2%25D0%25B8%25D1%2582%25D1%258C%2520%25D0%25B2%25D0%25B8%25D0%25B4%25D0%25B6%25D0%25B5%25D1%2582%2520%25D0%25A1%25D0%2591%25D0%259F%2520%25D0%25BD%25D0%25B0%2520%25D1%2581%25D0%25B0%25D0%25B9%25D1%2582%2520%25D0%25A2%25D0%25A1%25D0%259F.pdf*/
-                const baseUrl = " ht https://sbp1.metib.ru ";
-                /*https://qr.nspk.ru/AS100001ORTF4GAF80KPJ53K186D9A3G?type=01&bank=100000000007&crc=0C8A*/
-                /*eu payment system https://qna.habr.com/q/289047*/
-                /*var elements = stripe.elements({
-                    mode: 'payment',
-                    currency: 'usd',
-                    amount: 1099,
-                });*/
-                /*anon payment system https://habr.com/ru/articles/350430/*/
+            runPaymentSystem(id) {
+                /*Payment acceptance service on the website with crypto-access*/
+                // fetch my api which return url
+                // redirect to this url
+                alert("strict recomend use 5post or alternate post system")
             },
             predictPast(title){
                 this.sentmessageinput += " " + title;
