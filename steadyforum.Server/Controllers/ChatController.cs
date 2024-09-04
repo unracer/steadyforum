@@ -84,8 +84,8 @@ namespace steadyforum.Server.Controllers
                 .FirstOrDefaultAsync();
                 if ( chat == null || chat.Userlist == null || user.Uname == null) { return BadRequest("{ \"status\" : \"denied chat or not exist ;)\"} "); }
 
-            if ( !user.Chatlist.Contains(chatname) ) { return Problem("{ \"status\" : \"denied, click <create chat> and login to chat again or call admin\"} "); }
-            if ( !chat.Userlist.Contains(user.Uname) ) { return Problem("{ \"status\" : \"denied, click <create chat> and login to chat again or call admin\"} "); }
+            if ( !user.Chatlist.Contains(chatname) ) { return Problem("{ \"status\" : \"denied, click <create chat> and login to chat again or call admin\"} " ); } /* + user.Chatlist + chatname + chat.Userlist + user.Uname */
+            if ( !chat.Userlist.Contains(user.Uname) ) { return Problem("{ \"status\" : \"denied, click <create chat> and login to chat again or call admin\"} " ); }
 
             // sanitaze chatname by regexp
 
@@ -97,10 +97,12 @@ namespace steadyforum.Server.Controllers
                     .FirstOrDefaultAsync();
                     if ( chat == null ) { return Problem("null #sert54yh4"); }
 
-                return (IActionResult) await _context
+                var response = await _context
                     .Chatcontent
                     .Where(s => s.Idcontent == chat.Idcontent)
                     .ToListAsync();
+
+                return Ok(response);
             } 
             
             if (lastmessage > 0)
@@ -111,10 +113,12 @@ namespace steadyforum.Server.Controllers
                     .FirstOrDefaultAsync();
                     if (chat == null) { return Problem("null #edrs55v"); }
 
-                return (IActionResult)await _context
+                var response = await _context
                     .Chatcontent
-                    .Where(s => s.Idcontent == chat.Idcontent && s.id > lastmessage)
+                    .Where(s => s.Idcontent == chat.Idcontent && s.Id > lastmessage)
                     .ToListAsync();
+
+                return Ok(response);
             }
 
             return BadRequest("dont know why : check #57846232738239 line");
@@ -165,7 +169,7 @@ namespace steadyforum.Server.Controllers
 
             // add access user.chatlist and chat.userlist
 
-            var trackedUser = _context.User.Find(user.id);
+            var trackedUser = _context.User.Find(user.Id);
             if (trackedUser != null)
             {
                 trackedUser.Uname = user.Uname;
@@ -176,12 +180,13 @@ namespace steadyforum.Server.Controllers
                 _context.SaveChanges();
             }
 
-            var trackedChat = _context.Chat.Find(createdchat.id);
+            var trackedChat = _context.Chat.Find(createdchat.Id);
             if (trackedChat != null)
             {
                 trackedChat.Chatname = createdchat.Chatname;
                 trackedChat.Passwordhash = createdchat.Passwordhash;
-                trackedChat.Userlist = createdchat.Userlist + ",{\"uname\":\"" + user.Uname + "\"}"; // <space> for sec. bypass
+                /*trackedChat.Userlist = createdchat.Userlist + ",{\"uname\":\"" + user.Uname + "\"}";*/ // <space> for sec. bypass
+                trackedChat.Userlist = user.Uname + " , "; // <space> for sec. bypass
                 trackedChat.Idcontent = createdchat.Idcontent;
                 _context.SaveChanges();
             }
@@ -212,8 +217,8 @@ namespace steadyforum.Server.Controllers
              return View(chat);
          }*/
         // POST: Chat/Edit/5 /*Non web socket*/
-        [HttpPost("Chat/")]
-        public async Task<IActionResult> CreateChatContentNonWs(string sessionid, string chatname, [Bind("Readed,Date,Uname,Text,Meadiapath,Geo")] Chatcontent chatcontent) /* ? how encrypt message*/
+        [HttpPost("Chat/{sessionid}/{chatname}/{Uname}/{Text}/{Mediapath}/{Geo}")]
+        public async Task<IActionResult> CreateChatContentNonWs(string sessionid, string chatname, string Uname, string Text, string Mediapath, string Geo) /* ? how encrypt message*/
         {
             if (ModelState.IsValid)
             {
@@ -244,12 +249,12 @@ namespace steadyforum.Server.Controllers
 
                     _context.Chatcontent.Add(new Chatcontent { 
                         Idcontent = chatidcontent.Idcontent,
-                        Readed = chatcontent.Readed,
-                        Date = chatcontent.Date,
-                        Uname = chatcontent.Uname,
-                        Text = chatcontent.Text,
-                        Mediapath = chatcontent.Mediapath,
-                        Geo = chatcontent.Geo
+                        Readed = null,
+                        Date = new DateOnly(),
+                        Uname = Uname,
+                        Text = Text,
+                        Mediapath = Mediapath,
+                        Geo = Geo
                     });
                     var createdchatid = await _context.SaveChangesAsync();
 
@@ -316,7 +321,7 @@ namespace steadyforum.Server.Controllers
 
         private bool ChatExists(int id)
         {
-            return _context.Chat.Any(e => e.id == id);
+            return _context.Chat.Any(e => e.Id == id);
         }
     }
 }

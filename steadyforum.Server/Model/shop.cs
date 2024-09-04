@@ -12,7 +12,7 @@ namespace steadyforum.Server.Model
         public DateTime? Datecreate { get; set; }
         public string? Mediapath { get; set; }
         public string? Paymentsystem { get; set; }
-        public Url? Externallink { get; set; }
+        public string? Externallink { get; set; }
         public string? Description { get; set; }
         public bool? IsSale { get; set; }
     }

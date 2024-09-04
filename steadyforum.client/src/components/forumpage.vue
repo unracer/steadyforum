@@ -45,10 +45,11 @@
                 {{comment.uname}}
                 {{comment.message}}
                 {{comment.date}}
-                <button @click="reply({{comment.id}})">reply</button>
+                <!--<button @click="reply({{comment.id}})">reply</button>-->
+                <button @click="reply">reply</button>
             </div>
         </div>
-    </div>
+    </div>news
 </template>
 
 <script lang="ts">
@@ -132,7 +133,7 @@
                 /*take him from admin*/
                 /*request on backend like proxy for secure api-token*/
                 /*also load comments*/
-                newslistdefault = false;
+                var newslistdefault = false;
             },
             linkComments(){
                 if (newslistdefault){
@@ -147,6 +148,10 @@
 
                     }
                 }
+            },
+            reply(id){
+
+
             }
         },
     });

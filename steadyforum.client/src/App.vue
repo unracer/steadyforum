@@ -6,7 +6,7 @@
 <template>
     <div class="background"></div>
     <thelogin />
-    <slideritem />
+    <slideritem /> <!--view if have cookie-->
 </template>
 
 <style scope>

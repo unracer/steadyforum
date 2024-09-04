@@ -1,45 +1,48 @@
-﻿<template  @mouseover="pageOnfocus = true" @mouseleave="pageOnfocus = false">
-    <div v-if="loading" class="loading">
-        <!-- make random and add second game -->
-        Loading... Please  <a href="https://mrdoob.com/projects/chromeexperiments/google-gravity/">play with me</a> <!--for more fun.-->
-    </div>
+﻿<template >
+        <p class="myalert" v-if="myalert">{{myalert}}</p>
 
-    <div class="chatcontainer">
-        <div id="chatcard" v-for="chat in chatcontent" :key="chat.uname">
-            <p id="chatuname">{{chat.uname}}</p>
-            <p id="chatimage">{{chat.image}}</p>
-            <p id="chatdate">{{chat.date}}</p>
-            <p id="chatreadstate">{{chat.readstate}}</p>
-            <p id="chatmessage">{{chat.message}}</p>
+        <div v-if="loading" class="loading">
+            <!-- make random and add second game -->
+            Loading... Please  <a href="https://mrdoob.com/projects/chromeexperiments/google-gravity/">play with me</a> <!--for more fun.-->
         </div>
-    </div>
 
-    <div class="inputContainer">
-        <!--<img id="chatMsgImg" src="../assets/sidebarArrow.png" alt=">" />-->
-        <form class="form" id="msgForm" ref="msgFormRef" v-on:submit.prevent="onSubmit">
-            <input type="text" class="chatmessageinput" v-model="sentmessageinput" />
-            <input type="submit" class="chatmessageinput" @click="msgSend" style="display: none" />
-            <a class="cursorchat">></a>
-            <label class="cursor"></label>
-        </form>
-    </div>
+        <div class="chatcontainer" @mouseover="pageOnfocus = true" @mouseleave="pageOnfocus = false">
+            <div id="chatcard" v-for="chat in chatcontent" :key="chat.uname">
+                <p id="chatuname">{{chat.uname}}</p>
+                <p id="chatimage">{{chat.image}}</p>
+                <p id="chatdate">{{chat.readed}}</p>
+                <p id="chatreadstate">{{chat.date}}</p>
+                <p id="chatmessage">{{chat.text}}</p>
+                <p id="chatmessage" v-if="chat.mediapath">{{chat.mediapath}}</p>
+            </div>
+        </div>
 
-    <div class="chatinfocontainer">
-        <router-link class="chatinfocard" v-for="chat in chatlist" :key="chat.id" :to="{ name: 'chat', params: { name: chat.name }}">
-            <img class="chatBackgroundImage" src="../assets/logo.svg" alt="??" />
-        </router-link>
-
-        <button class="chatinfocard" @click="chatNew"><!--<img class="chatBackgroundImage" src="../assets/logo.svg" alt="??" />-->+++</button>
-        
-        <div class="chatcreate" v-if="chatcreatebutton">
-            <form v-on:submit.prevent="onSubmit">
-                <input type="text" id="chatInputName" v-model="chatInputName" placeholder=" chat name" />
-                <input type="text" id="chatInputKey" v-model="chatInputKey" placeholder=" secret key send friend" />
-                <a id="chatError">{{chatError}}</a>
-                <input type="submit" @click="chatNew" style="display: none" />
+        <div class="inputContainer" @mouseover="pageOnfocus = true" @mouseleave="pageOnfocus = false">
+            <!--<img id="chatMsgImg" src="../assets/sidebarArrow.png" alt=">" />-->
+            <form class="form" id="msgForm" ref="msgFormRef" v-on:submit.prevent="onSubmit">
+                <input type="text" class="chatmessageinput" v-model="sentmessageinput" />
+                <input type="submit" class="chatmessageinput" @click="PostChatContentNonWS" style="display: none" />
+                <a class="cursorchat">></a>
+                <label class="cursor"></label>
             </form>
         </div>
-    </div>
+
+        <div class="chatinfocontainer" @mouseover="pageOnfocus = true" @mouseleave="pageOnfocus = false">
+            <router-link class="chatinfocard" v-for="chat in chatlist" :key="chat.id" :to="{ name: 'chat', params: { name: chat.name }}">
+                <img class="chatBackgroundImage" src="../assets/logo.svg" alt="??" />
+            </router-link>
+
+            <button class="chatinfocard" @click="chatNew"><!--<img class="chatBackgroundImage" src="../assets/logo.svg" alt="??" />-->+++</button>
+
+            <div class="chatcreate" v-if="chatcreatebutton">
+                <form v-on:submit.prevent="onSubmit">
+                    <input type="text" id="chatInputName" v-model="chatInputName" placeholder=" chat name" />
+                    <input type="text" id="chatInputKey" v-model="chatInputKey" placeholder=" secret key send friend" />
+                    <a id="chatError">{{chatError}}</a>
+                    <input type="submit" @click="chatNew" style="display: none" />
+                </form>
+            </div>
+        </div>
 </template>
 
 
@@ -92,11 +95,14 @@
                 chatInputKey: null,
 
                 chatError: null,
+
+                myalert: null,
             };
         },
         created() {
             // fetch the data when the view is created and the data is
             // already being observed
+            /*this.changechat();*/
             this.getChatList();
             /*this.fetchData();*/
         },
@@ -104,6 +110,7 @@
             // call again the method if the route changes
             /*'$route': 'fetchData'*/
             '$route': 'changechat'
+            
         },
         methods: {
             fetchData(): void {
@@ -111,7 +118,8 @@
                 this.loading = true;              
             }, 
             changechat() {
-                if (this.oldchatname != this.currentchatname) { this.chatnamechaged = true; this.GetChatContentNotSubscribe(); } 
+                if (this.oldchatname != this.$route.path) { this.chatnamechaged = true; this.currentchatname = this.$route.path;  this.GetChatContentNonWS(); } 
+                this.oldchatname = this.$route.path;
             },
             chatNew() {
                 // only hide field
@@ -141,66 +149,95 @@
 
 
             },
-            async GetChatContentNonWs() { /*Depricated*/
-                if (this.chatnamechaged == true) { 
-                    this.chatnamechaged == false
-                    while (this.chatnamechaged == false) {
-                        if (this.pageOnfocus) {
+            async GetChatContentNonWS() { /*Depricated*/
 
-                            if (chatcontent == null) {
-                                id = 0
-                            } else {
-                                id = this.lastid
-                            }
+                if (this.chatnamechaged != true) {
+                    return
+                }
 
-                            fetch('api/Chat/' + this.$cookies.get("steadyforumsessionid") + '/' + this.chatname + '/' + id  )
-                                .then(r => r.json())
-                                .then(json => {
-                                    /* this.chatlist = json as Forecasts;*/
-                                    this.chatcontent = json;
-                                    this.lastid = json.lenght - 1;
-                                    alert(json.lenght +"unit of chat content");
-                                    this.loading = false;
-                                    return;
-                                });
-                            await new Promise(resolve => setTimeout(resolve, 1000)); 
+                this.chatnamechaged = false
+                    
+                while (this.chatnamechaged == false) {
+                    
+                    if (this.pageOnfocus) {
+
+                        var id = 0;
+
+                        if (this.lastid > 0) {
+                            id = this.lastid
                         }
-                        document.getElementById("chatcontainer").scrollTop = 99999;
+
+                        fetch('api/Chat/' + this.$cookies.get("steadyforumsessionid") /*+ '/'*/ + this.currentchatname + '/' + id)
+                            .then(r => r.json())
+                            .then(json => {
+                                /* this.chatlist = json as Forecasts;*/
+                                this.chatcontent = json;
+                                this.lastid = json.lenght - 1;
+                                /* alert(json.lenght +"unit of chat content");*/
+                                /*this.myalert = (Object.keys(json.list).length + " unit of chat list")*/
+                                this.loading = false;
+                                return;
+                            });
+                        await new Promise(resolve => setTimeout(resolve, 2000));
+
+                        /*if (document.getElementById("chatcontainer").scrollTop < 89999) {
+                            document.getElementById("chatcontainer").scrollTop = 99999;
+                        }*/
+
+                        /*document.getElementById("chatcontainer").scrollTop = 99999;*/
                     }
                 }  
             },  
-             async PostChatContentNonWs() { /*Depricated*/
+            async PostChatContentNonWS() { /*Depricated*/
+
+                if (this.sentmessageinput == null) {
+                    return;
+                }
                 let dateNow = new Date();
-                const requestOptionsPost = {
+                /*const requestOptionsPost = {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({
                             
-                              /*"id": 0,*/
-                              /*"idcontent": 0,*/
-                              /*"readed": {
+                              "Id": 0,
+                              "Idcontent": 0,
+                              "readed": {
                                 "year": 0,
                                 "month": 0,
                                 "day": 0,
                                 "dayOfWeek": 0
-                              },*/
-                              "date": {
+                              },
+                              "Date": {
                                 "year": dateNow.getFullYear(),
                                 "month": dateNow.getMonth(),
                                 "day": dateNow.getDate(),
                                 "dayOfWeek": 0
                               },
-                              "uname": "string",
-                              "text": "string",
-                              /*"mediapath": "string",*/
-                              /*"geo": "string"*/                            
+                              "Uname": this.$cookies.get("steadyforumuname"),
+                              "Text": this.sentmessageinput,
+                              "Mediapath": "string",
+                              "Geo": "string"                            
                         })
-                    };
+                 };*/
+                 /* alert(requestOptionsPost.body)*/
 
-                fetch('api/Chat/', requestOpions  )
-                    .then(r => r.json())
+                 const requestOptionsPost = {
+                     method: "POST",
+                 };
+
+                 var Mediapath = "/data/server-ru/12132/geo/56456"; /*jpg,mp4,mp3,geo .. path's*/
+                 var Geo = "000000000000";
+                 var date = dateNow.getFullYear() + '.' + dateNow.getMonth() + '.' + dateNow.getDate()
+                 fetch('api/Chat/' + this.$cookies.get("steadyforumsessionid") + this.$route.path + '/' + this.$cookies.get("steadyforumuname") + '/' + this.sentmessageinput + '/' + Mediapath +'/'+Geo, requestOptionsPost ) 
+                     .then(r => {
+                         if (r.status == 200) {
+                             this.sentmessageinput = null;
+                         }
+                         r.json()
+                     })
+
                     .then(json => {
-                        alert(json);
+                       /* this.myalert = json;*/
                         return;
                     });    
              }, 
@@ -235,6 +272,15 @@
 
 
 <style>
+    .myalert {
+        color: #000000;
+        background: #fd0000ab;
+        padding: 10px;
+        width: 100%;
+        text-align: center;
+        position: absolute;
+        font-family: fantasy;
+    }
     .inputContainer {
         height: 5%;
     }

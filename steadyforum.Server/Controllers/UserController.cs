@@ -96,10 +96,10 @@ namespace steadyforum.Server.Controllers
             {
                 if (userfound.Passwordhash != hashed)
                 {
-                    return Ok(userfound.id); 
+                    return BadRequest(userfound.Id); 
                 }
 
-                var trackedUser = _context.User.Find(userfound.id);
+                var trackedUser = _context.User.Find(userfound.Id);
 
                     if (trackedUser == null) { return BadRequest("{ \"status\" : \"ep tvoy maty ya hui znat kak that may be\"}"); }
 
@@ -224,7 +224,7 @@ namespace steadyforum.Server.Controllers
 
         private bool UserExists(int id)
         {
-            return _context.User.Any(e => e.id == id);
+            return _context.User.Any(e => e.Id == id);
         }
     }
 }

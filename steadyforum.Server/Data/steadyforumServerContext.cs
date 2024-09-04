@@ -25,7 +25,7 @@ namespace steadyforum.Server.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Chat>().ToTable("Chat");
-            modelBuilder.Entity<Chatcontent>().ToTable("Content");
+            modelBuilder.Entity<Chatcontent>().ToTable("Chatcontent");
             modelBuilder.Entity<User>().ToTable("User");
             modelBuilder.Entity<Advertise>().ToTable("Advertise");
             modelBuilder.Entity<News>().ToTable("News");

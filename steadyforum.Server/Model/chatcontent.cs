@@ -2,7 +2,7 @@ namespace steadyforum.Server.Model
 {
     public class Chatcontent
     {
-        public int? id { get; set; }
+        public int? Id { get; set; }
         public int? Idcontent { get; set; }
         public DateOnly? Readed { get; set; }
         public DateOnly? Date { get; set; }

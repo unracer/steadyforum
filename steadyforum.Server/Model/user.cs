@@ -2,7 +2,7 @@ namespace steadyforum.Server.Model
 {
     public class User
     {
-        public int id { get; set; }
+        public int Id { get; set; }
         public string? Uname { get; set; }
         public string? Passwordhash { get; set; }
         public string? Chatlist { get; set; }

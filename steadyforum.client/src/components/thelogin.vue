@@ -72,8 +72,8 @@
                 fetch('/api/Login/'+this.userLoginInput+"/"+userCredSha256)
                     .then(r => r.json())
                     .then(json => {
-                        /*this.$cookies.remove('steadyforumuname');
-                        this.$cookies.set("steadyforumuname", this.userLoginInput, "expiring time");*/
+                        this.$cookies.remove('steadyforumuname');
+                        this.$cookies.set("steadyforumuname", this.userLoginInput, "expiring time");
                         this.$cookies.remove('steadyforumsessionid');                        
                         this.$cookies.set("steadyforumsessionid", json.sessionid, "expiring time")
                         this.isloginshow = false;                        

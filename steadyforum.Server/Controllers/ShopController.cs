@@ -21,13 +21,13 @@ namespace steadyforum.Server.Controllers
         }
 
         // GET: User/Details/5
-        [HttpGet("Details/{sessionid}/{transactiontrackid}")]
+        /*[HttpGet("Details/{sessionid}/{transactiontrackid}")]
         public async Task<IActionResult> Details(string? sessionid, string? transactiontrackid)
         {
 
             // after payment request track to payment system gatway
 
-            /*if (sessionid == null)
+            if (sessionid == null)
             {
                 return NotFound();
             }
@@ -39,11 +39,11 @@ namespace steadyforum.Server.Controllers
             {
                 // 400
                 return BadRequest("{ \"status\" : \"expired\"}");
-            }*/
+            }
 
             // 200;
             return Ok("{ \"status\" : \"???\", \"days\" : \"" + "" +"\"}");
-        }
+        }*/
 
         // POST: User/Login
         /*[HttpGet("Login/{name}/{passwordhash}")]
@@ -128,8 +128,8 @@ namespace steadyforum.Server.Controllers
          }*/
 
         // POST: User/Order
-        [HttpPost]
-        public async Task<IActionResult> Order(string SessionId, int? UnitId, string? externalLink)
+        [HttpGet("Order/{SessionId}/{UnitId}/{externalLink}")]
+        public async Task<IActionResult> Order(string SessionId, int? UnitId, string? ExternalLink)
         {
 
             /* strict recomend use 5post or alternate*/
@@ -139,9 +139,9 @@ namespace steadyforum.Server.Controllers
                 return NotFound("null arg");
             }
 
-            if (externalLink != null)
+            if (ExternalLink != null)
             {
-                return Redirect(externalLink);
+                return Redirect(ExternalLink);
             }
             else if (UnitId != null)
             {
@@ -163,9 +163,8 @@ namespace steadyforum.Server.Controllers
             return BadRequest("strict recomend use 5post");
         }
 
-        [HttpPost]
-        /*[ValidateAntiForgeryToken]*/
-        public async Task<IActionResult> Search(string SessionId, string wishline )
+        [HttpGet("Search/{SessionId}/{wishline}")]
+        public async Task<IActionResult> Search(string SessionId, string wishline)
         {
 
             /* strict recomend use 5post or alternate*/
@@ -176,6 +175,11 @@ namespace steadyforum.Server.Controllers
             }
 
             // search 
+
+            var user = await _context
+                .User
+                .Where(s => s.Sessionid == SessionId)
+                .FirstOrDefaultAsync();
 
             var response = "{" +
                 "\"unit\":\"[]\"," +
@@ -270,7 +274,7 @@ namespace steadyforum.Server.Controllers
 
         private bool UserExists(int id)
         {
-            return _context.User.Any(e => e.id == id);
+            return _context.User.Any(e => e.Id == id);
         }
     }
 }

@@ -5,11 +5,11 @@ namespace steadyforum.Server.Model
 {
     public class Chat
     {
-        public int id { get; set; }
+        public int Id { get; set; }
         public int? Idcontent { get; set; } /*reference to content model*/
         public string? Chatname { get; set; }
         public string? Passwordhash { get; set; }
-        public string? Userlist { get; set; }
+        public string? Userlist { get; set; } /*MAKE ARRAY*/
 
         /*public string[] userlist { get; set; }*/ // feuture
 
@@ -22,7 +22,7 @@ namespace steadyforum.Server.Model
         }
         public void pushMessage(Chat chat)
         {
-            if (exist(chat.id)) { }
+            if (exist(chat.Id)) { }
 
             // push
         }
