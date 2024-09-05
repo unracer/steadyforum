@@ -6,14 +6,13 @@
             Loading... Please  <a href="https://mrdoob.com/projects/chromeexperiments/google-gravity/">play with me</a> <!--for more fun.-->
         </div>
 
-        <div class="chatcontainer" @mouseover="pageOnfocus = true" @mouseleave="pageOnfocus = false">
+        <div class="chatcontainer" id="chatcontainer" @mouseover="pageOnfocus = true" @mouseleave="pageOnfocus = false">
             <div id="chatcard" v-for="chat in chatcontent" :key="chat.uname">
                 <p id="chatuname">{{chat.uname}}</p>
-                <p id="chatimage">{{chat.image}}</p>
-                <p id="chatdate">{{chat.readed}}</p>
-                <p id="chatreadstate">{{chat.date}}</p>
+                <!--<p id="chatreadstate" v-if="chat.readed">+</p>-->
+                <p id="chatdate">{{chat.date}}</p>
                 <p id="chatmessage">{{chat.text}}</p>
-                <p id="chatmessage" v-if="chat.mediapath">{{chat.mediapath}}</p>
+                <!--<p id="chatmedia" v-if="chat.mediapath">{{chat.mediapath}}</p>-->
             </div>
         </div>
 
@@ -34,10 +33,11 @@
 
             <button class="chatinfocard" @click="chatNew"><!--<img class="chatBackgroundImage" src="../assets/logo.svg" alt="??" />-->+++</button>
 
-            <div class="chatcreate" v-if="chatcreatebutton">
+            <input v-if="chatcreatebutton" class="chatinfocard" type="text" id="chatInputName" v-model="chatInputName" placeholder=" chat name" />
+           
+            <div class="chatinfocard" v-if="chatcreatebutton">
                 <form v-on:submit.prevent="onSubmit">
-                    <input type="text" id="chatInputName" v-model="chatInputName" placeholder=" chat name" />
-                    <input type="text" id="chatInputKey" v-model="chatInputKey" placeholder=" secret key send friend" />
+                    <input class="chatinfocard" type="password" id="chatInputKey" v-model="chatInputKey" placeholder=" secret key" />
                     <a id="chatError">{{chatError}}</a>
                     <input type="submit" @click="chatNew" style="display: none" />
                 </form>
@@ -89,7 +89,7 @@
 
                 currentchatname: null,
                 oldchatname: null,
-                chatnamechaged: null,
+                chatnamechaged: true,
 
                 chatInputName: null,
                 chatInputKey: null,
@@ -97,20 +97,22 @@
                 chatError: null,
 
                 myalert: null,
+
+                chatscrollmax: null,
+                chatscrollsrop: false,
             };
         },
         created() {
             // fetch the data when the view is created and the data is
             // already being observed
             /*this.changechat();*/
-            this.getChatList();
+            this.changechat();
             /*this.fetchData();*/
         },
         watch: {
             // call again the method if the route changes
             /*'$route': 'fetchData'*/
             '$route': 'changechat'
-            
         },
         methods: {
             fetchData(): void {
@@ -118,8 +120,13 @@
                 this.loading = true;              
             }, 
             changechat() {
-                if (this.oldchatname != this.$route.path) { this.chatnamechaged = true; this.currentchatname = this.$route.path;  this.GetChatContentNonWS(); } 
-                this.oldchatname = this.$route.path;
+                if (this.oldchatname != "/"+this.$route.params.name) {   /*this.$route.path*/
+                    this.chatnamechaged = true; 
+                    this.currentchatname = "/"+this.$route.params.name;  
+                    this.GetChatContentNonWS(); 
+                    this.getChatList();
+                } 
+                this.oldchatname = "/"+this.$route.params.name;
             },
             chatNew() {
                 // only hide field
@@ -133,7 +140,7 @@
             },
             getChatList() {
                 if (this.$cookies.get("steadyforumsessionid")) { 
-                    fetch('api/List/' + this.$cookies.get("steadyforumsessionid"))
+                    fetch('/api/List/' + this.$cookies.get("steadyforumsessionid"))
                     .then(r => r.json())
                     .then(json => {
                         /* this.chatlist = json as Forecasts;*/
@@ -150,8 +157,8 @@
 
             },
             async GetChatContentNonWS() { /*Depricated*/
-
-                if (this.chatnamechaged != true) {
+                
+                if (this.chatnamechaged != true || this.currentchatname == "undefined") {
                     return
                 }
 
@@ -167,24 +174,38 @@
                             id = this.lastid
                         }
 
-                        fetch('api/Chat/' + this.$cookies.get("steadyforumsessionid") /*+ '/'*/ + this.currentchatname + '/' + id)
-                            .then(r => r.json())
+                        fetch('/api/Content/' + this.$cookies.get("steadyforumsessionid") /*+ '/'*/ + this.currentchatname + '/' + id)
+                            .then(r => {
+                                if (r.status == 200) {
+                                    this.myalert = null
+                                } else {
+                                    this.myalert = "fail rqauest"
+                                }
+                                return r.json()
+                            })
                             .then(json => {
                                 /* this.chatlist = json as Forecasts;*/
                                 this.chatcontent = json;
-                                this.lastid = json.lenght - 1;
-                                /* alert(json.lenght +"unit of chat content");*/
-                                /*this.myalert = (Object.keys(json.list).length + " unit of chat list")*/
-                                this.loading = false;
+                                this.lastid = (Object.keys(json).length -1)
                                 return;
                             });
-                        await new Promise(resolve => setTimeout(resolve, 2000));
+                    }
+                    await new Promise(resolve => setTimeout(resolve, 2000));
 
-                        /*if (document.getElementById("chatcontainer").scrollTop < 89999) {
-                            document.getElementById("chatcontainer").scrollTop = 99999;
-                        }*/
+                    if (document.getElementById("chatcontainer").scrollTop < this.chatscrollmax) {
+                        this.chatscrollsrop = true
+                        console.log("stop scroll")
+                    } else {
+                        this.chatscrollsrop = false
+                        console.log("continue scroll")
+                    }
 
-                        /*document.getElementById("chatcontainer").scrollTop = 99999;*/
+                    if (this.chatscrollsrop == false) {
+                        document.getElementById("chatcontainer").scrollTop = 99999;
+                    }
+
+                    if (document.getElementById("chatcontainer").scrollTop > this.chatscrollmax) {
+                        this.chatscrollmax = document.getElementById("chatcontainer").scrollTop 
                     }
                 }  
             },  
@@ -225,17 +246,19 @@
                      method: "POST",
                  };
 
-                 var Mediapath = "/data/server-ru/12132/geo/56456"; /*jpg,mp4,mp3,geo .. path's*/
-                 var Geo = "000000000000";
+                 var Mediapath = "null"; /*jpg,mp4,mp3,geo .. path's*/
                  var date = dateNow.getFullYear() + '.' + dateNow.getMonth() + '.' + dateNow.getDate()
-                 fetch('api/Chat/' + this.$cookies.get("steadyforumsessionid") + this.$route.path + '/' + this.$cookies.get("steadyforumuname") + '/' + this.sentmessageinput + '/' + Mediapath +'/'+Geo, requestOptionsPost ) 
+
+                 fetch('/api/Content/' + this.$cookies.get("steadyforumsessionid") + this.currentchatname + '/' + this.$cookies.get("steadyforumuname") + '/' + this.sentmessageinput + '/' + Mediapath, requestOptionsPost ) 
                      .then(r => {
                          if (r.status == 200) {
                              this.sentmessageinput = null;
+                             this.myalert = null
+                         } else {
+                             this.myalert = "fail sent"
                          }
                          r.json()
                      })
-
                     .then(json => {
                        /* this.myalert = json;*/
                         return;
@@ -283,6 +306,18 @@
     }
     .inputContainer {
         height: 5%;
+    }
+
+    .chatcreate {
+        height: 50px;
+        width: 100px;
+        background-color: #17141d;
+        border-radius: 10px;
+        box-shadow: -1rem 0 3rem #0000007a;
+        transition: 0.4s ease-out;
+        position: relative;
+        left: 0px;
+        color: #2c3e50;
     }
 
     .cursorchat {
@@ -397,6 +432,10 @@
     }
     .chatname {
         background-color: #17141d;
+    }
+
+    .router-link-active {
+        background: lightseagreen;
     }
 
     .chatinfocard:not(:first-child) {

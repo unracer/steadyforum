@@ -13,8 +13,7 @@ using static System.Net.Mime.MediaTypeNames;
 namespace steadyforum.Server.Controllers
 {
     [ApiController]
-   /* [Route("api/[controller]")]*/
-    [Route("api/")]
+    [Route("/api/")]
     public class ChatController : ControllerBase
     {
         private readonly steadyforumServerContext _context;
@@ -64,7 +63,7 @@ namespace steadyforum.Server.Controllers
 
         // POST: Chat/ContentOldApi
         /*Non web socket*/
-        [HttpGet("Chat/{sessionid}/{chatname}/{lastmessage}")]
+        [HttpGet("Content/{sessionid}/{chatname}/{lastmessage}")]
         public async Task<IActionResult> GetChatContentNonWS(string sessionid, string chatname, int lastmessage)
         {
             if (_context.Chat == null || _context.User == null) 
@@ -217,8 +216,8 @@ namespace steadyforum.Server.Controllers
              return View(chat);
          }*/
         // POST: Chat/Edit/5 /*Non web socket*/
-        [HttpPost("Chat/{sessionid}/{chatname}/{Uname}/{Text}/{Mediapath}/{Geo}")]
-        public async Task<IActionResult> CreateChatContentNonWs(string sessionid, string chatname, string Uname, string Text, string Mediapath, string Geo) /* ? how encrypt message*/
+        [HttpPost("Content/{sessionid}/{chatname}/{Uname}/{Text}/{Mediapath}")]
+        public async Task<IActionResult> CreateChatContentNonWs(string sessionid, string chatname, string Uname, string Text, string? Mediapath) /* ? how encrypt message*/
         {
             if (ModelState.IsValid)
             {
@@ -247,6 +246,12 @@ namespace steadyforum.Server.Controllers
                        .FirstOrDefaultAsync();
                         if (chatidcontent == null) { return Problem(); }
 
+                    /* sanitaze mediapath */
+                    if (Mediapath == "null")
+                    {
+                        Mediapath = null;
+                    }
+
                     _context.Chatcontent.Add(new Chatcontent { 
                         Idcontent = chatidcontent.Idcontent,
                         Readed = null,
@@ -254,7 +259,7 @@ namespace steadyforum.Server.Controllers
                         Uname = Uname,
                         Text = Text,
                         Mediapath = Mediapath,
-                        Geo = Geo
+                        Geo = null
                     });
                     var createdchatid = await _context.SaveChangesAsync();
 

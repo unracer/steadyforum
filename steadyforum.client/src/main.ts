@@ -19,21 +19,21 @@ const routes = [
         component: thelogin,
     },
     {
-        path: '/:name',
+        path: '/Chat/:name',
         name: 'chat',
         component: chatpage,
     },
     {
         /*title couse expired link leave amount unlike human-like data*/
         /*also by title can serach expired goods in other dealers*/
-        path: '/:titleid',
+        path: '/Forum/:titleid',
         name: 'news',
         component: forumpage,
     },
     {
         /*title couse expired link leave amount unlike human-like data*/
         /*also by title can serach expired goods in other dealers*/
-        path: '/:title', 
+        path: '/Shop/:title', 
         name: 'shop',
         component: shoppage,
     },

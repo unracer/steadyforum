@@ -10,7 +10,7 @@ namespace steadyforum.Server.Controllers
 {
     [ApiController]
     /*[Route("api/[controller]")]*/
-    [Route("api/")]
+    [Route("/")]
     public class ShopController : ControllerBase
     {
         private readonly steadyforumServerContext _context;

@@ -8,7 +8,7 @@ using steadyforum.Server.Model;
 namespace steadyforum.Server.Controllers
 {
     [ApiController]
-    [Route("api/")]
+    [Route("/api/")]
     public class UserController : ControllerBase
     {
         private readonly steadyforumServerContext _context;
