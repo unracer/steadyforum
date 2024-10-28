@@ -7,6 +7,7 @@ namespace steadyforum.Server.Model
     {
         public int Id { get; set; }
         public int? Idcontent { get; set; } /*reference to content model*/
+        /*public int? IrcMode { get; set; } */ // websocket dont sent data to database like internet realy chat
         public string? Chatname { get; set; }
         public string? Passwordhash { get; set; }
         public string? Userlist { get; set; } /*MAKE ARRAY*/

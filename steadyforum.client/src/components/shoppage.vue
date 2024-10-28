@@ -9,12 +9,12 @@
         е-каталог фареве
         -->
 
-        <div style="height: 45%; height: 400px; margin: 1em; overflow: hidden;">
+        <div style="height: 45%; height: 400px; margin: 1em; overflow: hidden; background: linear-gradient(to left, #4d4d4d7a 0%, transparent 10%);">
             <div class="shopcarousel">
                 <!--<div class="shopcarouselunit"><img src="../assets/logo.svg" alt="unit carousel" /><p></p></div>-->
                 <div class="shopcarouselunit" v-for="shopunit in shopcarousellist" :key="shopunit.id">
+                    <img src="../assets/logo.svg" alt="unit carousel" />
                     <router-link :to="{ name: 'shop', params: { title: shopunit.title }}" @click="runPaymentSystem(shopunit.id)">
-                        <img src="../assets/logo.svg" alt="unit carousel" />
                         <a style="top: -4em; position: relative; padding: 1em;  color: coral; box-shadow: 0px 0px 100px 0px rgb(0 0 0); background-color: rgb(165 165 165 / 38%); }">{{shopunit.title}}</a>
                     </router-link>
                 </div>
@@ -218,8 +218,9 @@
     /*predict*/
     .productpredict {
         padding: 1em;
-        height: 45%;
         width: 100%;
+        height: 12em;
+        overflow: hidden;
     }
     .predictTile {
         background-color: #5e5e5ed6;

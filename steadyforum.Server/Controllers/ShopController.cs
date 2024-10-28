@@ -132,7 +132,7 @@ namespace steadyforum.Server.Controllers
         public async Task<IActionResult> Order(string SessionId, int? UnitId, string? ExternalLink)
         {
 
-            /* strict recomend use 5post or alternate*/
+            /* strict recomend use 5post or alternate like watch dogs legion*/
 
             if (_context.User == null || _context.Chat == null)
             {
@@ -141,6 +141,7 @@ namespace steadyforum.Server.Controllers
 
             if (ExternalLink != null)
             {
+                // dont pay only redirect couse we only search
                 return Redirect(ExternalLink);
             }
             else if (UnitId != null)
