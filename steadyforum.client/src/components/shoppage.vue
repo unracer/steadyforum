@@ -1,38 +1,64 @@
-﻿<template @mouseover="pageOnfocus = true" @mouseleave="pageOnfocus = false">
+﻿<!--
+    + карусель товаров
 
-    <!-- верхняя 50% карусель
-        
-        нижняя 50% предпочтения (дешевле/дороже, важность камеры, важность процессора, батареи и тд..)
+    кравлер по сайтам товаров
 
-        алгоритм поиска по магазам типа е каталог
+    подсказки гугл для поиска
 
-        е-каталог фареве
-        -->
+    + активные заказы
 
-        <div style="height: 45%; height: 400px; margin: 1em; overflow: hidden; background: linear-gradient(to left, #4d4d4d7a 0%, transparent 10%);">
-            <div class="shopcarousel">
-                <!--<div class="shopcarouselunit"><img src="../assets/logo.svg" alt="unit carousel" /><p></p></div>-->
-                <div class="shopcarouselunit" v-for="shopunit in shopcarousellist" :key="shopunit.id">
-                    <img src="../assets/logo.svg" alt="unit carousel" />
-                    <router-link :to="{ name: 'shop', params: { title: shopunit.title }}" @click="runPaymentSystem(shopunit.id)">
-                        <a style="top: -4em; position: relative; padding: 1em;  color: coral; box-shadow: 0px 0px 100px 0px rgb(0 0 0); background-color: rgb(165 165 165 / 38%); }">{{shopunit.title}}</a>
-                    </router-link>
-                </div>
+    + элемент заказа
+
+    оплата
+
+-->
+
+<template @mouseover="pageOnfocus = true" @mouseleave="pageOnfocus = false">
+
+    <div style="height: 45%; height: 400px; margin: 1em; overflow: hidden; background: linear-gradient(to left, #4d4d4d7a 0%, transparent 10%);">
+        <div class="shopcarousel">
+            <!--<div class="shopcarouselunit"><img src="../assets/logo.svg" alt="unit carousel" /><p></p></div>-->
+            <div class="shopcarouselunit" v-for="shopunit in shopcarousellist" :key="shopunit.id">
+                <img src="../assets/logo.svg" alt="unit carousel" />
+                <router-link :to="{ name: 'shop', params: { title: shopunit.title }}" @click="runPaymentSystem(shopunit.id, null)">
+                    <a style="top: -4em; position: relative; padding: 1em;  color: coral; box-shadow: 0px 0px 100px 0px rgb(0 0 0); background-color: rgb(165 165 165 / 38%); }">{{shopunit.title}}</a>
+                </router-link>
             </div>
         </div>
+    </div>
 
-        <div class="productsearch">
-            <form class="form"  ref="msgFormRef" v-on:submit.prevent="onSubmit">
-                <input type="text" class="unitsearchinput" v-model="sentmessageinput" placeholder="searching .."/>
-                <input type="submit" class="unitsearchinput" @click="msgSend" style="display: none" />
-                <a class="cursorshop">></a>
-                <label class="cursor"></label>
-            </form>
-        </div>
+    <div class="productsearch">
+        <form class="form" ref="msgFormRef" v-on:submit.prevent="onSubmit">
+            <input type="text" class="unitsearchinput" v-model="sentmessageinput" placeholder="searching .." />
+            <input type="submit" class="unitsearchinput" @click="msgSend" style="display: none" />
+            <a class="cursorshop">></a>
+            <label class="cursor"></label>
+        </form>
+    </div>
 
-        <div class="productpredict">
-            <div class="predictTile" v-for="hintunit in productpredictlist" :key="hintunit.title" @click="predictPast(hintunit.title)">{{hintunit.title}}</div>
+    <div class="productpredict">
+        <div class="predictTile" v-for="hintunit in productpredictlist" :key="hintunit.title" @click="predictPast(hintunit.title)">{{hintunit.title}}</div>
+    </div>
+
+    <div class="postorder" v-if="showOrder">
+        <input v-model="postTo" type="text" placeholder="post unit id" />
+        <input v-model="postSize" type="radio" placeholder="post unit id" />
+        order will expired for 2 minute without paid
+        <img src="../assets/5post-size-manual.png" alt="post size" />
+        <button @click="runPaymentSystem(null,null)">paid crypto wallet only</button>
+    </div>
+
+    <div class="postDelivery">
+        <input type="password" placeholder="search" />
+        <div class="postDeliveryRow" v-for="post in postlist" :key="post:id">
+            {{post.date}}
+            {{post.expired}}
+            {{post.id}}
+            {{post.status}}
+            <button @click="runPaymentSystem(null, paid)">paid</button>
+            <button @click="runPaymentSystem(null, abort)">abort</button>
         </div>
+    </div>
 </template>
 
 <script lang="ts">
@@ -43,50 +69,29 @@
             return {
                 loading: false,
                 shopcarousellist: [
-                    { id: 0, title: "steady Merch steack..", image: "../assets/logo.svg" },
-                    { id: 1, title: "steady Merch hoodie ..", image: "../assets/logo.svg" },
-                    { id: 2, title: "steady Merch quadrocopter pack ..", image: "../assets/logo.svg" },
-                    { id: 3, title: "steady Merch hardware pack ..", image: "../assets/logo.svg" },
-                    { id: 4, title: "steady Merch software pack ..", image: "../assets/logo.svg" },
-                    { id: 5, title: "steady Merch phone ..", image: "../assets/logo.svg" },
+                    { id: 0, title: "hoodie..", image: "../assets/merch-1.jpg" },
+                    { id: 1, title: "backpack ..", image: "../assets/merch-2.jpg" },
+                    { id: 2, title: "drone ..", image: "../assets/merch-3-1.jpg" },
+                    { id: 2, title: "drone ..", image: "../assets/merch-3-2.jpg" },
+                    { id: 2, title: "drone ..", image: "../assets/merch-3-3.jpg" },
+                    { id: 3, title: "lock decoder ..", image: "../assets/merch-5.jpg" },
+                    { id: 4, title: "drone software ..", image: "../assets/merch-3.jpg" },
+                    { id: 4, title: "team party ..", image: "../assets/merch-4.jpg" },
                 ],
                 productpredictlist: [
                     { title: "Predict:", link: "wait .." },
-                    { title: "cat", link: "wait .." },
-                    { title: "road", link: "wait .." },
+                    { title: "ddr5", link: "wait .." },
+                    { title: "ssd m2", link: "wait .." },
+                    { title: "usb4.0", link: "wait .." },
                     { title: "xss", link: "wait .." },
-                    { title: "amazing", link: "wait .." },
-                    { title: "steady", link: "wait .." },
-                    { title: "small", link: "wait .." },
-                    { title: "red", link: "wait .." },
-                    { title: "Predict", link: "wait .." },
-                    { title: "cat", link: "wait .." },
-                    { title: "road", link: "wait .." },
-                    { title: "xss", link: "wait .." },
-                    { title: "amazing", link: "wait .." },
-                    { title: "steady", link: "wait .." },
-                    { title: "small", link: "wait .." },
-                    { title: "red", link: "wait .." },
-                    { title: "Predict", link: "wait .." },
-                    { title: "cat", link: "wait .." },
-                    { title: "road", link: "wait .." },
-                    { title: "xss", link: "wait .." },
-                    { title: "amazing", link: "wait .." },
-                    { title: "steady", link: "wait .." },
-                    { title: "small", link: "wait .." },
-                    { title: "red", link: "wait .." },
-                    { title: "Predict", link: "wait .." },
-                    { title: "cat", link: "wait .." },
-                    { title: "road", link: "wait .." },
-                    { title: "xss", link: "wait .." },
-                    { title: "amazing", link: "wait .." },
-                    { title: "steady", link: "wait .." },
-                    { title: "small", link: "wait .." },
-                    { title: "red", link: "wait .." },
-                    { title: "Predict", link: "wait .." },
+                    { title: "dread", link: "wait .." },
+                    { title: "raid", link: "wait .." },
+                    { title: "redteam", link: "wait .." },
                 ],
                 chatcreatebutton: false,
                 sentmessageinput: "oppo realme ram 8gb cam 120mpx ",
+                showOrder: false,
+                readtopay: false,
             };
         },
         created() {
@@ -136,20 +141,65 @@
 
 
             },
-            runPaymentSystem(id) {
-                /*Payment acceptance service on the website with crypto-access*/
-                // fetch my api which return url
-                // redirect to this url
-                alert("strict recomend use 5post or alternate post system")
+            runPaymentSystem(id, action) {
+                if (id == null && action == null) {
+                    /*just sent to database and our personal can sent using himself account of 5post*/
+
+                    const requestOptions = {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(
+                            {
+                                postFrom = /*backend hardcode store addres*/ null,
+                                postAmount = /*backend hardcode by unit id*/ null,
+                                this.postTo,
+                                this.postSize,
+                                this.unitId,
+                                this.postId,
+                                expired = "120",
+                                status = "wait" /*wait/paid/send/take*/,
+                            }
+                        )
+                    };
+
+                    let postStatus = await fetch('/chats/' + requestOptions)
+                        .then(r => r.json())
+                        .then(json => {
+                            /* this.chatlist = json as Forecasts;*/
+                            this.chatlist = json;
+                            this.loading = false;
+                            return;
+                        });
+
+                    if (postStatus == 200) {
+                        this.showOrder = false
+                        /* i cant trust for this shit .. omg i mainless*/
+                        /*let status = router.push({ path: 'bitcoin.com', query: { postid: this.postid, wallet: '3894573' } })*/
+                    }
+
+                }
+
+                if (id != null && !showOrder) {
+                    alert("* It is strongly recommended to use 5post or an alternative postal system\n* Using paper money or an nfc\n* 5post have 5% commission")
+                    this.showOrder = true
+                    this.unitId = id
+
+                    /*check db last order id*/
+
+                    this.postId = /*recieved*/ null
+
+                }
+
+                console.Log("called runPaymentSystem")
             },
-            predictPast(title){
+            predictPast(title) {
                 this.sentmessageinput += " " + title;
             },
         },
     });
 </script>
 
-<style >
+<style>
     /*carousel*/
     * {
         -ms-overflow-style: none;
@@ -180,9 +230,9 @@
             margin: 10px 0;
         }
 
-    .shopcarousel div:first-child {
-        margin: 0;
-    }
+            .shopcarousel div:first-child {
+                margin: 0;
+            }
 
     .shopcarouselunit {
         padding: 10px;
@@ -205,11 +255,13 @@
         margin-left: 1em;
         left: 0.6em;
     }
+
     .productsearch {
         padding: 1em;
         width: 100%;
     }
-    .cursorshop{
+
+    .cursorshop {
         color: coral;
     }
 
@@ -219,9 +271,10 @@
     .productpredict {
         padding: 1em;
         width: 100%;
-        height: 12em;
+        height: 2em;
         overflow: hidden;
     }
+
     .predictTile {
         background-color: #5e5e5ed6;
         border-radius: 15px;
@@ -231,5 +284,19 @@
         color: coral;
     }
 
+    /*delivery*/
+    .postDelivery {
+        height: 10em;
+        width: 100%;
+        background: red;
+        padding: 0.5em;
+    }
+
+    .postDeliveryRow {
+        height: 1em;
+        width: 100%;
+        background: blue;
+        padding: 0.1em;
+    }
 </style>
 

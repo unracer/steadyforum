@@ -1,4 +1,15 @@
-﻿<template >
+﻿<!--
+    + карусель чатов    
+
+    создание чатов
+
+    инвайты в групповые чат
+
+    вебсокеты
+
+-->
+
+<template >
         <p class="myalert" v-if="myalert">{{myalert}}</p>
 
         <div v-if="loading" class="loading">
@@ -153,8 +164,19 @@
                 }
             },
             async LoginChat(){
-
-
+                /*no-fucking way
+                couse have vulnerabulity by key-value
+                alternate use add by invite link below*/
+            },
+            async InviteChat(username) { /*like @123*/
+                fetch('/api/Invite/' + this.$cookies.get("steadyforumsessionid") + "/" + username)
+                    .then(r => {
+                        console.log(r.status)
+                        return r.json()
+                    })
+                    .then(json => {
+                        return Object.keys(json);
+                    });
             },
             async GetChatContentNonWS() { /*Depricated*/
                 
