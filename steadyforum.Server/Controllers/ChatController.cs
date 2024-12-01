@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -55,10 +56,10 @@ namespace steadyforum.Server.Controllers
                 .User
                 .Where(s => s.Sessionid == sessionid)
                 .FirstOrDefaultAsync();
-                if (user == null || user.Chatlist == null) { return BadRequest("{ \"status\" : \" expired session \"} "); }
+            if (user == null || user.Chatlist == null) { return BadRequest("{ \"status\" : \" expired session \"} "); }
 
             // remove password from output
-            return Ok("[ "+ (Regex.Replace(user.Chatlist, @"\W+key\W+\w+", ""))+" ]");
+            return Ok("[ " + (Regex.Replace(user.Chatlist, @"\W+key\W+\w+", "")) + " ]");
         }
 
         // POST: Chat/ContentOldApi
@@ -66,25 +67,25 @@ namespace steadyforum.Server.Controllers
         [HttpGet("Content/{sessionid}/{chatname}/{lastmessage}")]
         public async Task<IActionResult> GetChatContentNonWS(string sessionid, string chatname, int lastmessage)
         {
-            if (_context.Chat == null || _context.User == null) 
-            { 
-                return NotFound("null arg"); 
+            if (_context.Chat == null || _context.User == null)
+            {
+                return NotFound("null arg");
             }
 
             var user = await _context
                 .User
                 .Where(s => s.Sessionid == sessionid)
                 .FirstOrDefaultAsync();
-                if (user == null || user.Chatlist == null) { return BadRequest("{ \"status\" : \"expired session\"} "); }
+            if (user == null || user.Chatlist == null) { return BadRequest("{ \"status\" : \"expired session\"} "); }
 
             var chat = await _context
                 .Chat
                 .Where(s => s.Chatname == chatname)
                 .FirstOrDefaultAsync();
-                if ( chat == null || chat.Userlist == null || user.Uname == null) { return BadRequest("{ \"status\" : \"denied chat or not exist ;)\"} "); }
+            if (chat == null || chat.Userlist == null || user.Uname == null) { return BadRequest("{ \"status\" : \"denied chat or not exist ;)\"} "); }
 
-            if ( !user.Chatlist.Contains(chatname) ) { return Problem("{ \"status\" : \"denied, click <create chat> and login to chat again or call admin\"} " ); } /* + user.Chatlist + chatname + chat.Userlist + user.Uname */
-            if ( !chat.Userlist.Contains(user.Uname) ) { return Problem("{ \"status\" : \"denied, click <create chat> and login to chat again or call admin\"} " ); }
+            if (!user.Chatlist.Contains(chatname)) { return Problem("{ \"status\" : \"denied, click <create chat> and login to chat again or call admin\"} "); } /* + user.Chatlist + chatname + chat.Userlist + user.Uname */
+            if (!chat.Userlist.Contains(user.Uname)) { return Problem("{ \"status\" : \"denied, click <create chat> and login to chat again or call admin\"} "); }
 
             // sanitaze chatname by regexp
 
@@ -94,7 +95,7 @@ namespace steadyforum.Server.Controllers
                     .Chat
                     .Where(s => s.Chatname == chatname)
                     .FirstOrDefaultAsync();
-                    if ( chat == null ) { return Problem("null #sert54yh4"); }
+                if (chat == null) { return Problem("null #sert54yh4"); }
 
                 var response = await _context
                     .Chatcontent
@@ -102,15 +103,15 @@ namespace steadyforum.Server.Controllers
                     .ToListAsync();
 
                 return Ok(response);
-            } 
-            
+            }
+
             if (lastmessage > 0)
             {
                 chat = await _context
                     .Chat
                     .Where(s => s.Chatname == chatname)
                     .FirstOrDefaultAsync();
-                    if (chat == null) { return Problem("null #edrs55v"); }
+                if (chat == null) { return Problem("null #edrs55v"); }
 
                 var response = await _context
                     .Chatcontent
@@ -125,19 +126,19 @@ namespace steadyforum.Server.Controllers
 
         // POST: Chat/Create
         [HttpGet("Login/{sessionid}/{chatname}/{passwordhash}")]
-        public async Task<IActionResult> LoginChat(string sessionid, string chatname,string passwordhash)
+        public async Task<IActionResult> LoginChat(string sessionid, string chatname, string passwordhash)
         {
 
-            if (_context.User == null || _context.Chat == null ) 
-            { 
-                return NotFound("null arg"); 
+            if (_context.User == null || _context.Chat == null)
+            {
+                return NotFound("null arg");
             }
 
             var user = await _context
                 .User
                 .Where(s => s.Sessionid == sessionid)
                 .FirstOrDefaultAsync();
-                if (user == null) { return BadRequest(" expired session "); }
+            if (user == null) { return BadRequest(" expired session "); }
 
             var foundchat = await _context
                 .Chat
@@ -164,7 +165,7 @@ namespace steadyforum.Server.Controllers
                 .Chat
                 .Where(s => s.Chatname == chatname)
                 .FirstOrDefaultAsync();
-                if (createdchat == null || createdchat.Passwordhash != passwordhash) { return Problem(" denied chat or cant create >_< "); }
+            if (createdchat == null || createdchat.Passwordhash != passwordhash) { return Problem(" denied chat or cant create >_< "); }
 
             // add access user.chatlist and chat.userlist
 
@@ -215,118 +216,121 @@ namespace steadyforum.Server.Controllers
              }
              return View(chat);
          }*/
+
         // POST: Chat/Edit/5 /*Non web socket*/
-        [HttpPost("Content/{sessionid}/{chatname}/{Uname}/{Text}/{Mediapath}")]
+        [HttpPost("Content/{sessionid}/{chatname}")]
         public async Task<IActionResult> CreateChatContentNonWs(string sessionid, string chatname, string Uname, string Text, string? Mediapath) /* ? how encrypt message*/
         {
-            if (ModelState.IsValid)
-            {
-                try
+            if (!ModelState.IsValid) { return BadRequest(); }
+
+            try {
+                // check access
+                var user = await _context
+                    .User
+                    .Where(s => s.Sessionid == sessionid)
+                    .FirstOrDefaultAsync();
+                if (user == null || user.Chatlist == null) { return BadRequest(" expired session "); }
+
+                var chat = await _context
+                    .Chat
+                    .Where(s => s.Chatname == chatname)
+                    .FirstOrDefaultAsync();
+                if (chat == null || chat.Userlist == null || user.Uname == null) { return BadRequest("{ \"status\" : \"denied chat or not exist ;)\"} "); }
+
+                if (!user.Chatlist.Contains(chatname)) { return Problem("{ \"status\" : \"denied, click <create chat> and login to chat again or call admin\"} "); }
+                if (!chat.Userlist.Contains(user.Uname)) { return Problem("{ \"status\" : \"denied, click <create chat> and login to chat again or call admin\"} "); }
+
+                // create
+                var chatidcontent = await _context
+                   .Chat
+                   .Where(s => s.Chatname == chatname)
+                   .FirstOrDefaultAsync();
+                if (chatidcontent == null) { return Problem(); }
+
+                /* sanitaze mediapath */
+                if (Mediapath == "null")
                 {
-                    // check access
-                    var user = await _context
-                        .User
-                        .Where(s => s.Sessionid == sessionid)
-                        .FirstOrDefaultAsync();
-                        if (user == null || user.Chatlist == null) { return BadRequest(" expired session "); }
-
-                    var chat = await _context
-                        .Chat
-                        .Where(s => s.Chatname == chatname)
-                        .FirstOrDefaultAsync();
-                        if (chat == null || chat.Userlist == null || user.Uname == null ) { return BadRequest("{ \"status\" : \"denied chat or not exist ;)\"} "); }
-
-                    if (!user.Chatlist.Contains(chatname)) { return Problem("{ \"status\" : \"denied, click <create chat> and login to chat again or call admin\"} "); }
-                    if (!chat.Userlist.Contains(user.Uname)) { return Problem("{ \"status\" : \"denied, click <create chat> and login to chat again or call admin\"} "); }
-
-                    // create
-                    var chatidcontent = await _context
-                       .Chat
-                       .Where(s => s.Chatname == chatname)
-                       .FirstOrDefaultAsync();
-                        if (chatidcontent == null) { return Problem(); }
-
-                    /* sanitaze mediapath */
-                    if (Mediapath == "null")
-                    {
-                        Mediapath = null;
-                    }
-
-                    _context.Chatcontent.Add(new Chatcontent { 
-                        Idcontent = chatidcontent.Idcontent,
-                        Readed = null,
-                        Date = new DateOnly(),
-                        Uname = Uname,
-                        Text = Text,
-                        Mediapath = Mediapath,
-                        Geo = null
-                    });
-                    var createdchatid = await _context.SaveChangesAsync();
-
-                    /* reference text to another table */
-
-                    /*var createdchat = await _context
-                        .Chat
-                        .Where(s => s.id == createdchatid)
-                        .FirstOrDefaultAsync();
-                        if ( createdchat == null ) { return Problem(); }
-
-                    _context.Chatcontent.Add(new Chatcontent { idcontent = createdchat.idcontent});
-                    await _context.SaveChangesAsync();*/
-
+                    Mediapath = null;
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    /*if (!ChatExists(chatcontent.id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }*/
-                }
-                return Ok();
+
+                _context.Chatcontent.Add(new Chatcontent {
+                    Idcontent = chatidcontent.Idcontent,
+                    Readed = null,
+                    Date = new DateOnly(),
+                    Uname = Uname,
+                    Text = Text,
+                    Mediapath = Mediapath,
+                    Geo = null
+                });
+                var createdchatid = await _context.SaveChangesAsync();
+
+                /* reference text to another table */
+
+                /*var createdchat = await _context
+                    .Chat
+                    .Where(s => s.id == createdchatid)
+                    .FirstOrDefaultAsync();
+                    if ( createdchat == null ) { return Problem(); }
+
+                _context.Chatcontent.Add(new Chatcontent { idcontent = createdchat.idcontent});
+                await _context.SaveChangesAsync();*/
+
             }
-            return BadRequest();
+            catch (DbUpdateConcurrencyException)
+            {
+                /*if (!ChatExists(chatcontent.id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }*/
+            }
+            return Ok();
         }
 
-        // GET: Chat/Delete/5
-        /*public async Task<IActionResult> Delete(int? id)
+        private readonly ChatWebSocketHandler _webSocketHandler;
+
+        public ChatController(ChatWebSocketHandler webSocketHandler)
         {
-            if (id == null)
+            _webSocketHandler = webSocketHandler;
+        }
+
+        // POST: Chat/Edit/5 /*Non web socket*/
+        [HttpPost("Content/{sessionid}/{chatname}")]
+        public async Task<IActionResult> ChatWS(string sessionid, string chatname) /* ? how encrypt message*/
+        {
+            if (!ModelState.IsValid) { return BadRequest(); }
+
+            // check access
+            var user = await _context
+                .User
+                .Where(s => s.Sessionid == sessionid)
+                .FirstOrDefaultAsync();
+            if (user == null || user.Chatlist == null) { return BadRequest(" expired session "); }
+
+            var chat = await _context
+                .Chat
+                .Where(s => s.Chatname == chatname)
+                .FirstOrDefaultAsync();
+            if (chat == null || chat.Userlist == null || user.Uname == null) { return BadRequest("{ \"status\" : \"denied chat or not exist ;)\"} "); }
+
+            if (!user.Chatlist.Contains(chatname)) { return Problem("{ \"status\" : \"denied, click <create chat> and login to chat again or call admin\"} "); }
+            if (!chat.Userlist.Contains(user.Uname)) { return Problem("{ \"status\" : \"denied, click <create chat> and login to chat again or call admin\"} "); }
+
+            //preperation
+
+            if (!HttpContext.WebSockets.IsWebSocketRequest)
             {
-                return NotFound();
+                return BadRequest("Websocket is not support");                
             }
 
-            var chat = await _context.Chat
-                .FirstOrDefaultAsync(m => m.id == id);
-            if (chat == null)
-            {
-                return NotFound();
-            }
+            /*accept but not create new handler. Add to old handler. Amazing*/
+            var webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
+            await _webSocketHandler.HandlerWebSocket(HttpContext, webSocket, chatname);
 
-            return View(chat);
-        }*/
-
-        // POST: Chat/Delete/5
-        /*[HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var chat = await _context.Chat.FindAsync(id);
-            if (chat != null)
-            {
-                _context.Chat.Remove(chat);
-            }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }*/
-
-        private bool ChatExists(int id)
-        {
-            return _context.Chat.Any(e => e.Id == id);
+            return Ok("closed");
         }
     }
 }
