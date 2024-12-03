@@ -3,9 +3,9 @@
     <!-- 
         брать новости из паблииков, приватов
 
-        юэкграунд фото рисует ии по тексту
+        +/- бэкграунд фото рисует ии по тексту
 
-        справа в углу кнопка озвучивания текста (заебался читать) ии, на бэкграунде избранные сообщения комментаторов
+        + справа в углу кнопка озвучивания текста (заебался читать) ии, на бэкграунде избранные сообщения комментаторов
 
         + коменты как в вк
         -->
@@ -24,6 +24,7 @@
     <div id="newsWrapper">
         <div id="newsBody" v-for="news in newslist" :key="news.tag">
             <!--<img id="newsBackgroundImg" :src="require(`../assets/${news.image}`)" alt="" />-->
+            <button class="newsSpeak" @click="newsSpeak(comment.id)">speak</button>
             <img id="newsBackgroundImg" src="../assets/Cisco.jpg" alt="" />
             <div class="newsContent">
 
@@ -48,7 +49,7 @@
                     <button class="commentReply" @click="reply(comment.id)">reply</button>
                 </div>
             </div>
-            
+
             <input class="newsComment" type="text" placeholder="comment.." />
         </div>
     </div>
@@ -163,6 +164,12 @@
             },
             async sentReply(id, text){
 
+            },
+            async newsSpeak(id) {
+                let textValue = this.newslist[id].content
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                window.speechSynthesis.speak(utterance);
             }
         },
     });

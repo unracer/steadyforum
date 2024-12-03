@@ -15,11 +15,11 @@ namespace steadyforum.Server.Controllers
 {
     [ApiController]
     [Route("/api/")]
-    public class ChatController : ControllerBase
+    public class Take : ControllerBase
     {
         private readonly steadyforumServerContext _context;
 
-        public ChatController(steadyforumServerContext context)
+        public Take(steadyforumServerContext context)
         {
             _context = context;
         }
@@ -292,7 +292,7 @@ namespace steadyforum.Server.Controllers
 
         private readonly ChatWebSocketHandler _webSocketHandler;
 
-        public ChatController(ChatWebSocketHandler webSocketHandler)
+        public Take(ChatWebSocketHandler webSocketHandler)
         {
             _webSocketHandler = webSocketHandler;
         }

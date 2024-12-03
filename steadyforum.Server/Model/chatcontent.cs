@@ -1,6 +1,6 @@
 namespace steadyforum.Server.Model
 {
-    public class Chatcontent
+    public class Chatcontent 
     {
         public int? Id { get; set; }
         public int? Idcontent { get; set; }
