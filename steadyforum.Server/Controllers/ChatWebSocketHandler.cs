@@ -15,10 +15,9 @@ namespace steadyforum.Server.Controllers
             _logger = logger;
         }
 
-        public async Task HandlerWebSocket(HttpContext context, WebSocketManager webSocket, chatname)
+        public async Task HandlerWebSocket(HttpContext context, WebSocket webSocket, string chatname)
         {
             var socketId = _connectionManager.AddSocket(webSocket, chatname);
-            /*var socketId = _connectionPool.AddSocket(webSocket);*/
             _logger.LogInformation("establish {socketId}");
 
             while (webSocket.State == WebSocketState.Open)
@@ -29,7 +28,7 @@ namespace steadyforum.Server.Controllers
                     continue;
                 }
                 _logger.LogInformation("receive {socketID}");
-                await BroadcastMessageAsync(message);
+                await BroadcastMessageAsync(message, chatname);
             }
             _connectionManager.RemoveSocket(socketId);
             _logger.LogInformation("closed {socketId}");
@@ -46,13 +45,13 @@ namespace steadyforum.Server.Controllers
             return System.Text.Encoding.UTF8.GetString(buffer, 0, result.Count);
         }
 
-        private async Task BroadcastMessageAsync(string message)
+        private async Task BroadcastMessageAsync(string message, string chatname)
         {
-            foreach (var socket in _connectionManager.GetAllSockets())
+            foreach (var socket in _connectionManager.GetGroupSocket(chatname))
             {
-                if (socket.Value.State == WebSocketState.Open)
+                if (socket.State == WebSocketState.Open)
                 {
-                    await socket.Value.SendAsync(System.Text.Encoding.UTF8.GetBytes(message), WebSocketMessageType.Text, true, CancellationToken.None);
+                    await socket.SendAsync(System.Text.Encoding.UTF8.GetBytes(message), WebSocketMessageType.Text, true, CancellationToken.None);
                 }
             }
         }

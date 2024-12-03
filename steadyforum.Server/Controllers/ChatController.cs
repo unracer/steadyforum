@@ -326,7 +326,7 @@ namespace steadyforum.Server.Controllers
                 return BadRequest("Websocket is not support");                
             }
 
-            /*accept but not create new handler. Add to old handler. Amazing*/
+            /*filter socket by chatname for broadcast*/
             var webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
             await _webSocketHandler.HandlerWebSocket(HttpContext, webSocket, chatname);
 

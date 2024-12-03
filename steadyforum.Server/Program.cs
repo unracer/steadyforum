@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using steadyforum.Server.Controllers;
 using steadyforum.Server.Data;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<steadyforumServerContext>(options =>
@@ -24,6 +25,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c => {  c.SwaggerEndpoint("/swagger/v2/swagger.json", "MVCCallWebAPI"); }); 
 }
+
+// middleware
+
+app.UseWebSockets();
 
 app.UseHttpsRedirection();
 
