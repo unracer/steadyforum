@@ -9,8 +9,10 @@
 
         + коменты как в вк
         -->
-
-    Loading... Please  <a href="https://mrdoob.com/projects/chromeexperiments/google-gravity/">play with me</a> for more fun.
+    <div v-if="loading"> 
+        Loading... Please  <a href="https://mrdoob.com/projects/chromeexperiments/google-gravity/">play with me</a> for more fun.
+    </div>
+   
 
     <div class="newssearch">
         <form class="form" ref="msgFormRef" v-on:submit.prevent="onSubmit">

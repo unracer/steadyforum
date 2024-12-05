@@ -47,6 +47,7 @@ namespace steadyforum.Server.Controllers
                 await _context.SaveChangesAsync();
             }            
         }
+        /*https://vc.ru/midjourney/1145347-obzor-api-yes-ai-dlya-generacii-kartinok-s-pomoshyu-neiroseti-midjourney*/
         private string GenerateWallpaper(string content)
         {
             var mediapath = "";

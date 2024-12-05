@@ -1,6 +1,7 @@
 <script setup lang="ts">
     import thelogin from './components/thelogin.vue'
     import slideritem from './components/slideritem.vue'
+
 </script>
 
 <template>
@@ -16,14 +17,14 @@
         width: 100%;
         height: 100%;
     }
-   
+
     header {
-      line-height: 1.5;
+        line-height: 1.5;
     }
 
     .logo {
-      display: block;
-      margin: 0 auto 2rem;
+        display: block;
+        margin: 0 auto 2rem;
     }
 
     .background {
@@ -39,6 +40,4 @@
         z-index: -1;
         opacity: 2;
     }
-
-
 </style>

@@ -1,10 +1,17 @@
 <!--we not garanted more 50% uptime
 
+    персональный цвет загрузки с краю от логина (open source антифишинг)
+
     but still freedom place
 
     уникалльная возможность блокировать вход после потери фокуса, если вход был с недоверенного устройства
     *отдельный модуль по странному поведению пользователя, по ключевым словам поиска
     -->
+/* main?
+    request usercontroller/pageloadcolor(sessionid)
+
+
+*/
 
 <template>
     <div class="loginWrapper" v-if="isloginshow">
@@ -12,6 +19,13 @@
         <p> chat anon and fast with us.</p>
         <p>we not garanted more 50% uptime</p>
         <p>but still freedom place</p>
+
+        <div class="loader">
+            <div class="inner one"></div>
+            <div class="inner two"></div>
+            <div class="inner three"></div>
+        </div>
+
         <br>
         <input id="loginName" v-model="userLoginInput" type="password" /><br />
         <input id="loginPassword" v-model="userPasswordInput" type="password" /><br />
@@ -39,6 +53,7 @@
             // fetch the data when the view is created and the data is
             // already being observed
             this.userLogin()
+            this.userLoginInput = this.$cookies.set("steadyforumuname");
         },
         watch: {
             // call again the method if the route changes
@@ -69,14 +84,14 @@
                 var userCredBase64 = btoa(unescape(encodeURIComponent(this.userLoginInput + this.userPasswordInput)));
                 var userCredSha256 = await this.sha256(userCredBase64)
 
-                fetch('/api/Login/'+this.userLoginInput+"/"+userCredSha256)
+                fetch('/api/Login/' + this.userLoginInput + "/" + userCredSha256)
                     .then(r => r.json())
                     .then(json => {
                         this.$cookies.remove('steadyforumuname');
                         this.$cookies.set("steadyforumuname", this.userLoginInput, "expiring time");
-                        this.$cookies.remove('steadyforumsessionid');                        
+                        this.$cookies.remove('steadyforumsessionid');
                         this.$cookies.set("steadyforumsessionid", json.sessionid, "expiring time")
-                        this.isloginshow = false;                        
+                        this.isloginshow = false;
                         return;
                     });
             }
@@ -130,8 +145,77 @@
         color: #00ffc4;
     }
 
-        #loginBtn:active {
-            background: gray;
-            transition: 0.2s ease-in;
+    #loginBtn:active {
+        background: gray;
+        transition: 0.2s ease-in;
+    }
+
+    .loader {
+        position: absolute;
+        top: calc(50% - 32px);
+        left: calc(50% - 32px);
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        perspective: 800px;
+    }
+
+    .inner {
+        position: absolute;
+        box-sizing: border-box;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+    }
+
+        .inner.one {
+            left: 0%;
+            top: 0%;
+            animation: rotate-one 1s linear infinite;
+            border-bottom: 3px solid #EFEFFA;
         }
+
+        .inner.two {
+            right: 0%;
+            top: 0%;
+            animation: rotate-two 1s linear infinite;
+            border-right: 3px solid #EFEFFA;
+        }
+
+        .inner.three {
+            right: 0%;
+            bottom: 0%;
+            animation: rotate-three 1s linear infinite;
+            border-top: 3px solid #EFEFFA;
+        }
+
+    @keyframes rotate-one {
+        0% {
+            transform: rotateX(35deg) rotateY(-45deg) rotateZ(0deg);
+        }
+
+        100% {
+            transform: rotateX(35deg) rotateY(-45deg) rotateZ(360deg);
+        }
+    }
+
+    @keyframes rotate-two {
+        0% {
+            transform: rotateX(50deg) rotateY(10deg) rotateZ(0deg);
+        }
+
+        100% {
+            transform: rotateX(50deg) rotateY(10deg) rotateZ(360deg);
+        }
+    }
+
+    @keyframes rotate-three {
+        0% {
+            transform: rotateX(35deg) rotateY(55deg) rotateZ(0deg);
+        }
+
+        100% {
+            transform: rotateX(35deg) rotateY(55deg) rotateZ(360deg);
+        }
+    }
 </style>
