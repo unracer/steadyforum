@@ -15,10 +15,10 @@
         <p>we not garanted more 50% uptime</p>
         <p>but still freedom place</p>
 
-        <div class="loader">
-            <div class="inner one"></div>
-            <div class="inner two"></div>
-            <div class="inner three"></div>
+        <div class="loader" >
+            <div class="inner one" style="border-bottom: 3px solid {{loadercolor}};"></div>
+            <div class="inner two" style="border-right: 3px solid {{loadercolor}}; "></div>
+            <div class="inner three" style="border-top: 3px solid {{loadercolor}};"></div>
         </div>
 
         <br>
@@ -42,11 +42,13 @@
                 userPasswordInput: null,
                 issessionexpired: true,
                 loginMessage: null,
+                loadercolor: "#ffff00",
             };
         },
         created() {
             // fetch the data when the view is created and the data is
             // already being observed
+            await this.requestloadercolor()
             this.userLogin()
             this.userLoginInput = this.$cookies.set("steadyforumuname");
         },
@@ -87,6 +89,14 @@
                         this.$cookies.remove('steadyforumsessionid');
                         this.$cookies.set("steadyforumsessionid", json.sessionid, "expiring time")
                         this.isloginshow = false;
+                        return;
+                    });
+            },
+            requestloadercolor() {
+                fetch('/api/LoginColor/' this.sessionId)
+                    .then(r => r.json())
+                    .then(json => {
+                        this.loadercolor = json.loadercolor;
                         return;
                     });
             }
@@ -147,8 +157,8 @@
 
     .loader {
         position: absolute;
-        top: calc(50% - 32px);
-        left: calc(50% - 32px);
+        top: calc(10% - 32px);
+        left: calc(10% - 32px);
         width: 64px;
         height: 64px;
         border-radius: 50%;
