@@ -7,11 +7,6 @@
     уникалльная возможность блокировать вход после потери фокуса, если вход был с недоверенного устройства
     *отдельный модуль по странному поведению пользователя, по ключевым словам поиска
     -->
-/* main?
-    request usercontroller/pageloadcolor(sessionid)
-
-
-*/
 
 <template>
     <div class="loginWrapper" v-if="isloginshow">
