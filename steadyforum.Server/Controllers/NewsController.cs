@@ -3,6 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using steadyforum.Server.Data;
 using steadyforum.Server.Model;
 using System.Text.RegularExpressions;
+using System.Security.Cryptography;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using steadyforum.Server.Data;
+using steadyforum.Server.Model;
 
 namespace steadyforum.Server.Controllers
 {
@@ -45,7 +51,8 @@ namespace steadyforum.Server.Controllers
             {
                 _context.Add(pastValueChat);
                 await _context.SaveChangesAsync();
-            }            
+            }
+            return Ok();
         }
         /*https://vc.ru/midjourney/1145347-obzor-api-yes-ai-dlya-generacii-kartinok-s-pomoshyu-neiroseti-midjourney*/
         private string GenerateWallpaper(string content)
