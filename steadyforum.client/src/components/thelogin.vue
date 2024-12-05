@@ -1,6 +1,6 @@
 <!--we not garanted more 50% uptime
 
-    персональный цвет загрузки с краю от логина (open source антифишинг)
+    + персональный цвет загрузки с краю от логина (open source антифишинг)
 
     but still freedom place
 
