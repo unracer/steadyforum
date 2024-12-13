@@ -15,22 +15,23 @@
 
 <template @mouseover="pageOnfocus = true" @mouseleave="pageOnfocus = false">
 
-    <div style="height: 45%; height: 400px; margin: 1em; overflow: hidden; background: linear-gradient(to left, #4d4d4d7a 0%, transparent 10%);">
+    <div style="height: 45%; height: 400px; margin: 1em; overflow: hidden;">
         <div class="shopcarousel">
             <!--<div class="shopcarouselunit"><img src="../assets/logo.svg" alt="unit carousel" /><p></p></div>-->
             <div class="shopcarouselunit" v-for="shopunit in shopcarousellist" :key="shopunit.id">
                 <img src="../assets/logo.svg" alt="unit carousel" />
-                <router-link :to="{ name: 'shop', params: { title: shopunit.title }}" @click="runPaymentSystem(shopunit.id, null)">
+                <router-link :to="{ name: 'shop', params: { title: shopunit.title } }" @click="runPaymentSystem(shopunit.id, null)">
                     <a style="top: -4em; position: relative; padding: 1em;  color: coral; box-shadow: 0px 0px 100px 0px rgb(0 0 0); background-color: rgb(165 165 165 / 38%); }">{{shopunit.title}}</a>
                 </router-link>
             </div>
+            <div class="attenuation"></div>
         </div>
     </div>
 
     <div class="productsearch">
         <form class="form" ref="msgFormRef" v-on:submit.prevent="onSubmit">
-            <input type="text" class="unitsearchinput" v-model="sentmessageinput" placeholder="searching .." />
-            <input type="submit" class="unitsearchinput" @click="msgSend" style="display: none" />
+            <input type="text" class="searchTheme" v-model="sentmessageinput" placeholder="search unit" />
+            <input type="submit" class="searchTheme" @click="msgSend" style="display: none" />
             <a class="cursorshop">></a>
             <label class="cursor"></label>
         </form>
@@ -47,14 +48,22 @@
         <img src="../assets/5post-size-manual.png" alt="post size" />
         <button @click="runPaymentSystem(null,null)">paid crypto wallet only</button>
     </div>
-
+        
     <div class="postDelivery">
-        <input type="password" placeholder="search" />
-        <div class="postDeliveryRow" v-for="post in postlist" :key="post:id">
-            {{post.date}}
-            {{post.expired}}
-            {{post.id}}
-            {{post.status}}
+        <div class="ordersearch">
+            <form class="form" ref="msgFormRef" v-on:submit.prevent="onSubmit">
+                <input type="text" class="searchTheme" v-model="deliverysearchinput" placeholder="serach order" />
+                <input type="submit" class="searchTheme" @click="deliverySearch" style="display: none" />
+                <a class="cursorshop">></a>
+                <label class="cursor"></label>
+            </form>
+        </div>
+
+        <div class="postDeliveryRow" v-for="post in deliverylist" :key="post.id">
+            {{post.id}}&#160
+            {{post.date}}&#160
+            {{post.expired}}&#160
+            {{post.status}}&#160
             <button @click="runPaymentSystem(null, paid)">paid</button>
             <button @click="runPaymentSystem(null, abort)">abort</button>
         </div>
@@ -87,11 +96,32 @@
                     { title: "dread", link: "wait .." },
                     { title: "raid", link: "wait .." },
                     { title: "redteam", link: "wait .." },
+                    { title: "Predict:", link: "wait .." },
+                    { title: "ddr5", link: "wait .." },
+                    { title: "ssd m2", link: "wait .." },
+                    { title: "usb4.0", link: "wait .." },
+                    { title: "xss", link: "wait .." },
+                    { title: "dread", link: "wait .." },
+                    { title: "raid", link: "wait .." },
+                    { title: "redteam", link: "wait .." },
+                ],
+                deliverylist: [
+                    { id: 0, date: "01/01/2001", expired: "02/01/2001", status: "created/paid/aborted"},
+                    { id: 1, date: "01/01/2001", expired: "02/01/2001", status: "created/paid/aborted"},
+                    { id: 2, date: "01/01/2001", expired: "02/01/2001", status: "created/paid/aborted"},
+                    { id: 3, date: "01/01/2001", expired: "02/01/2001", status: "created/paid/aborted"},
+                    { id: 4, date: "01/01/2001", expired: "02/01/2001", status: "created/paid/aborted"},
+                    { id: 0, date: "01/01/2001", expired: "02/01/2001", status: "created/paid/aborted"},
+                    { id: 1, date: "01/01/2001", expired: "02/01/2001", status: "created/paid/aborted"},
+                    { id: 2, date: "01/01/2001", expired: "02/01/2001", status: "created/paid/aborted"},
+                    { id: 3, date: "01/01/2001", expired: "02/01/2001", status: "created/paid/aborted"},
+                    { id: 4, date: "01/01/2001", expired: "02/01/2001", status: "created/paid/aborted"},
                 ],
                 chatcreatebutton: false,
-                sentmessageinput: "oppo realme ram 8gb cam 120mpx ",
+                sentmessageinput: null,
                 showOrder: false,
                 readtopay: false,
+                deliverysearchinput: null,
             };
         },
         created() {
@@ -141,7 +171,7 @@
 
 
             },
-            runPaymentSystem(id, action) {
+            async runPaymentSystem(id, action) {
                 if (id == null && action == null) {
                     /*just sent to database and our personal can sent using himself account of 5post*/
 
@@ -150,14 +180,14 @@
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify(
                             {
-                                postFrom = /*backend hardcode store addres*/ null,
-                                postAmount = /*backend hardcode by unit id*/ null,
-                                this.postTo,
-                                this.postSize,
-                                this.unitId,
-                                this.postId,
-                                expired = "120",
-                                status = "wait" /*wait/paid/send/take*/,
+                                //postFrom = null, /*backend hardcode store addres*/
+                                //postAmount = null, /*backend hardcode by unit id*/
+                                //postTo = this.postTo,
+                                //postSize = this.postSize,
+                                //unitId = this.unitId,
+                                //postId = this.postId,
+                                //expired = "120",
+                                //status = "wait" /*wait/paid/send/take*/,
                             }
                         )
                     };
@@ -212,6 +242,11 @@
         object-fit: cover;
     }
 
+    .attenuation {
+        background: linear-gradient(to left, rgb(10 17 14) 0%, #00000000 10%);
+        /*background: linear-gradient(to left, #4d4d4d7a 0%, transparent 10%);*/
+    }
+
     .shopcarousel {
         width: 800px;
         height: 100vw;
@@ -245,7 +280,7 @@
 
 
     /*input*/
-    .unitsearchinput {
+    .searchTheme {
         background-color: #00000000;
         width: 100%;
         border: none;
@@ -269,9 +304,10 @@
 
     /*predict*/
     .productpredict {
-        padding: 1em;
+        padding-left: 1em;
+        padding-right: 1em;
         width: 100%;
-        height: 2em;
+        height: 4em;
         overflow: hidden;
     }
 
@@ -286,17 +322,21 @@
 
     /*delivery*/
     .postDelivery {
-        height: 10em;
-        width: 100%;
-        background: red;
-        padding: 0.5em;
+        position: relative;
+        height: 12em;
+        /* width: 100%; */
+        /* background: #ff0000fc; */
+        padding: 1em;
+        overflow: scroll;
+        /* margin: 1em; */
     }
-
+    
     .postDeliveryRow {
-        height: 1em;
+        height: 1.5em;
         width: 100%;
-        background: blue;
+        /* background: blue; */
         padding: 0.1em;
+        margin: 0.2em;
     }
 </style>
 

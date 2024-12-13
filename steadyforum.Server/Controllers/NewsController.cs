@@ -24,7 +24,7 @@ namespace steadyforum.Server.Controllers
         }
 
         // POST: Chat/List
-        [HttpGet("Login/{sessionid}/{chatname}/{passwordhash}")]
+        [HttpPost("News/{sessionid}/{chatname}/{passwordhash}")]
         public async Task<IActionResult> AddNews(string sessionid, [Bind("Id,Date,Title,Tag,Content,Mediapath,Reference,Like,Dislike,Repost")] News news)
         {
             if (_context.News == null)

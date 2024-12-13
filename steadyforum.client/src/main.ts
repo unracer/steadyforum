@@ -11,6 +11,8 @@ import forumpage from './components/forumpage.vue';
 import chatpage from './components/chatpage.vue';
 import shoppage from './components/shoppage.vue';
 import thelogin from './components/thelogin.vue';
+import controllpage from './components/controllpage.vue';
+import slideritem from './components/slideritem.vue'
 
 const routes = [
     {
@@ -19,23 +21,33 @@ const routes = [
         component: thelogin,
     },
     {
+        path: '/slider',
+        name: 'slider',
+        component: slideritem,
+    },
+    {
         path: '/Chat/:name',
         name: 'chat',
-        component: chatpage,
+        component: slideritem,
     },
-    {
-        /*title couse expired link leave amount unlike human-like data*/
-        /*also by title can serach expired goods in other dealers*/
+    /*title couse expired link leave amount unlike human-like data
+        also by title can serach expired goods in other dealers*/
+    {       
         path: '/Forum/:titleid',
         name: 'news',
-        component: forumpage,
+        component: slideritem,
     },
-    {
-        /*title couse expired link leave amount unlike human-like data*/
-        /*also by title can serach expired goods in other dealers*/
+    /*title couse expired link leave amount unlike human-like data
+        also by title can serach expired goods in other dealers*/
+    {        
         path: '/Shop/:title', 
         name: 'shop',
-        component: shoppage,
+        component: slideritem,
+    },
+    {
+        path: '/Controll/:sessionId',
+        name: 'controll',
+        component: controllpage,
     },
 ]
 

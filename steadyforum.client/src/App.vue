@@ -1,13 +1,13 @@
 <script setup lang="ts">
     import thelogin from './components/thelogin.vue'
     import slideritem from './components/slideritem.vue'
+    import controllpage from './components/controllpage.vue'
 
 </script>
 
 <template>
     <div class="background"></div>
-    <thelogin />
-    <slideritem /> <!--view if have cookie-->
+    <router-view></router-view>
 </template>
 
 <style scope>

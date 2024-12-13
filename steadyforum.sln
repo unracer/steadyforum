@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "steadyforum.Server", "stead
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "steadyforum.client", "steadyforum.client\steadyforum.client.esproj", "{8CA0042C-1A6B-407F-A78C-F022B65B52CC}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "steadyforumServerContext-53affff5-4b9a-4b21-bdc1-c3d17508cc0d", "steadyforumServerContext-53affff5-4b9a-4b21-bdc1-c3d17508cc0d\steadyforumServerContext-53affff5-4b9a-4b21-bdc1-c3d17508cc0d.sqlproj", "{963DFF1B-AD3B-47B2-988D-FCE1BBF32809}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,12 +23,6 @@ Global
 		{8CA0042C-1A6B-407F-A78C-F022B65B52CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8CA0042C-1A6B-407F-A78C-F022B65B52CC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8CA0042C-1A6B-407F-A78C-F022B65B52CC}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{963DFF1B-AD3B-47B2-988D-FCE1BBF32809}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{963DFF1B-AD3B-47B2-988D-FCE1BBF32809}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{963DFF1B-AD3B-47B2-988D-FCE1BBF32809}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{963DFF1B-AD3B-47B2-988D-FCE1BBF32809}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{963DFF1B-AD3B-47B2-988D-FCE1BBF32809}.Release|Any CPU.Build.0 = Release|Any CPU
-		{963DFF1B-AD3B-47B2-988D-FCE1BBF32809}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

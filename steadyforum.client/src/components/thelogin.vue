@@ -49,8 +49,8 @@
         created() {
             // fetch the data when the view is created and the data is
             // already being observed
-            await this.requestloadercolor()
-            this.userLogin()
+            this.requestloadercolor();
+            this.userLogin();
             this.userLoginInput = this.$cookies.set("steadyforumuname");
         },
         watch: {
@@ -64,7 +64,7 @@
                 const hashHex = hashArray.map(b => ('00' + b.toString(16)).slice(-2)).join('');
                 return hashHex;
             },
-            async userLogin() {
+            async userLogin() {             
                 if (this.$cookies.get("steadyforumsessionid")) {
                     fetch('/api/Details/' + this.$cookies.get("steadyforumsessionid"))
                         .then(response => {
@@ -73,8 +73,8 @@
                             } else if (response.status == 200) {
                                 this.isloginshow = false;
                             }
-                            return
-                        })
+                            return;
+                    })
                 }
 
                 if (!this.userLoginInput) { return }
@@ -89,12 +89,12 @@
                         this.$cookies.set("steadyforumuname", this.userLoginInput, "expiring time");
                         this.$cookies.remove('steadyforumsessionid');
                         this.$cookies.set("steadyforumsessionid", json.sessionid, "expiring time")
-                        this.isloginshow = false;
+                        this.$router.push({ name: 'slider' });  /*instead this.isloginshow = false;*/                        
                         return;
                     });
             },
             requestloadercolor() {
-                fetch('/api/LoginColor/' this.sessionId)
+                fetch('/api/LoginColor/' + this.sessionId)
                     .then(r => r.json())
                     .then(json => {
                         this.loadercolor = json.loadercolor;

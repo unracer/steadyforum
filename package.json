@@ -1,6 +1,6 @@
 {
   "dependencies": {
     "vue-cookies": "^1.8.4",
-    "vue-router": "^4.4.3"
+    "vue-router": "^4.5.0"
   }
 }

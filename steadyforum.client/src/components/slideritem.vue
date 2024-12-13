@@ -122,7 +122,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 10px 10px;
+        /*padding: 10px 10px;*/
         font-family: 'DM Sans', sans-serif;
         transition: background .4s ease-in;
     }
