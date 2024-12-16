@@ -1,6 +1,6 @@
 
 
-
+#![](https://github.com/inracer/steadyforum/blob/master/steadyforum_preview.mp4?raw=true)
 https://github.com/user-attachments/assets/22e33a13-0245-46c0-81c2-3d892621a8c8
 
 
@@ -30,3 +30,6 @@ DBcontext > add like this > Database.EnsureCreated();
 optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=steadyforumServerContext-53affff5-4b9a-4b21-bdc1-c3d17508cc0d;Trusted_Connection=True;MultipleActiveResultSets=true;");  
 cmd > dotnet ef migration add init  
 cahnge > proxy: { '^/api': {
+
+#![](https://github.com/inracer/steadyforum/blob/master/admin_preview.png?raw=true)
+![alt text](https://github.com/unracer/steadyforum/blob/master/admin_preview.png?raw=true)
