@@ -1,8 +1,4 @@
-
-
-
-https://github.com/user-attachments/assets/22e33a13-0245-46c0-81c2-3d892621a8c8
-
+https://github.com/user-attachments/assets/52c43e25-1459-42db-a640-4f132e25b15a
 
 # what you get if research
 - comfortable ui/ux for everyday witch must be at all messendgers
@@ -30,3 +26,5 @@ DBcontext > add like this > Database.EnsureCreated();
 optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=steadyforumServerContext-53affff5-4b9a-4b21-bdc1-c3d17508cc0d;Trusted_Connection=True;MultipleActiveResultSets=true;");  
 cmd > dotnet ef migration add init  
 cahnge > proxy: { '^/api': {
+
+![](https://github.com/unracer/steadyforum/blob/master/admin_preview.png?raw=true)
