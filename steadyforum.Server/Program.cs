@@ -35,6 +35,9 @@ if (app.Environment.IsDevelopment())
 
 // middleware
 
+System.Diagnostics.Process.Start("dotnet add package Microsoft.EntityFrameworkCore.SqlServer");
+System.Diagnostics.Process.Start("Install-Package Microsoft.EntityFrameworkCore.SqlServer");
+
 app.UseWebSockets();
 
 app.UseHttpsRedirection();

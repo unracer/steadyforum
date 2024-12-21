@@ -1,20 +1,28 @@
 ﻿<template >
-    <!--<div class="siem-stat-container">
+    <div class="siem-stat-container">
 
-        <div class="circleWrapper" id="boxSort">
-            <a id="circleLegend1"></a>
-            <a id="circleLegend2"></a>
+        <div class="circleWrapper" id="circleshop">
+            <a id="circleLegend1">{{allorder}}</a>
+            <a id="circleLegend2">{{allmerch}}</a>
+            <!--<a id="circleLegend3">shop</a>-->
+        </div>        
+
+        <div class="circleWrapper" id="circlenews">
+            <a id="circleLegend1">{{allpost}}</a>
+            <a id="circleLegend2">{{allcomment}}</a>
+           <!-- <a id="circleLegend3">news</a>-->
         </div>
 
-        <div class="circleWrapper" id="boxCheck">
-            <a id="circleLegend1"></a>
-            <a id="circleLegend2"></a>
+        <div class="circleWrapper" id="circlechat">
+            <a id="circleLegend1">{{allchat}}</a>
+            <a id="circleLegend2">{{alluser}}</a>
+            <!--<a id="circleLegend3">chat</a>-->
         </div>
 
-        <div class="circleWrapper" id="imageRename">-->
-            <!-- не все верно переименованы кста -->
-            <!--<a id="circleLegend1"></a>
-            <a id="circleLegend2"></a>
+        <div class="circleWrapper" id="circledatabse">
+            <a id="circleLegend1">{{weightStorage}}</a>
+            <a id="circleLegend2">{{loadStorage}}</a>
+            <!--<a id="circleLegend3">chat</a>-->
         </div>
 
         <div class="gistoWrapper">
@@ -23,29 +31,35 @@
     </div>
 
     <div class="siem-log-container">
+        server log - 16.12.24 18:46 stat: cpu storage ethernet
+        <br />
+        <br />
         {{server_log}}
-    </div>-->
+    </div>
 
     <div class="database-container">
         <details>
-            <summary>Select table use mouse</summary>
-            <p>user</p>
-            <p>chat</p>
-            <p>message</p>
-            <p>shop</p>
-            <p>forum-news</p>
-            <p>forum-comment</p>
+            <summary>Select table using mouse</summary>
+            <p>user_db</p>
+            <p>chat_db</p>
+            <p>message_db</p>
+            <p>shop_db</p>
+            <p>forum-news_db</p>
+            <p>forum-comment_db</p>
         </details>
 
-        <input id="newRowDatabase" v-model="newRowDatabase_1" type="text" />
-        <button id="saveNewRow" v-on:click="() => saveNewRow()">save</button>
-        <button id="deleteNewRow" v-on:click="() => deleteNewRow()">delete</button>
+        <input v-for="entity in editRowDatabase_1[0]" :key="entity.id"  
+                id="newRowDatabase" type="text" :placeholder="entity"/>
+        <button id="saveNewRow" v-on:click="() => saveNewRow()">save new row</button>
+        <button id="deleteNewRow" v-on:click="() => deleteNewRow()">clear field</button><br /><br />
 
         <div class="dataTable">
-            <input id="editRowDatabase" v-model="editRowDatabase_1" type="text"
-                    v-for="entity in row" :key="entity.name" />
-            <button id="saveNewRow" v-on:click="() => saveNewRow()">save</button>
-            <button id="deleteNewRow" v-on:click="() => deleteNewRow()">delete</button>
+            <div v-for="row in editRowDatabase_1" :key="row.id">
+                <input id="editRowDatabase" type="text"
+                       v-for="entity in row" :key="entity.id" :placeholder="entity" :value="entity"/>
+                <button class="databaseaction" v-on:click="() => saveNewRow()">save</button>
+                <button class="databaseaction" v-on:click="() => deleteNewRow()">delete</button>
+            </div>            
         </div>
     </div>
 </template>
@@ -64,12 +78,46 @@
                 loading: false,
                 post: null,
                 server_log: 
-                    "request 234.142.234.2 /vue.icon " +
-                    "request 234.142.234.2 ../../vue.icon (Possible path traversal) "   +               
-                    "request 234.142.234.2 ../../vue.icon?index=alert() (Possible reflected xxs) "
+                    "request 234.142.234.2 /vue.icon \n" +
+                    "request 234.142.234.2 ../../vue.icon (Possible path traversal) \n"   +
+                    "request 234.142.234.2 ../../vue.icon (Possible path traversal) \n"   +
+                    "request 234.142.234.2 ../../vue.icon (Possible path traversal) \n"   +
+                    "request 234.142.234.2 ../../vue.icon (Possible path traversal) \n"   +
+                    "request 234.142.234.2 ../../vue.icon (Possible path traversal) \n"   +
+                    "request 234.142.234.2 ../../vue.icon (Possible path traversal) \n"   +
+                    "request 234.142.234.2 ../../vue.icon (Possible path traversal) \n"   +
+                    "request 234.142.234.2 ../../vue.icon (Possible path traversal) \n"   +
+                    "request 234.142.234.2 ../../vue.icon (Possible path traversal) \n"   +
+                    "request 234.142.234.2 ../../vue.icon (Possible path traversal) \n"   +
+                    "request 234.142.234.2 ../../vue.icon (Possible path traversal) \n"   +
+                    "request 234.142.234.2 ../../vue.icon?index=alert() (Possible reflected xxs) \n"
                 ,
                 newRowDatabase_1: null,
                 editRowDatabase_1: null,
+                stat: null,
+                allorder: null,
+                allmerch: null,
+                allpost: null,
+                allcomment: null,
+                allchat: null,
+                alluser: null,
+                weightStorage: null,
+                loadStorage: null,
+                editRowDatabase_1: [
+                    { id: 1, name: "name123", female: "femail123"},
+                    { id: 2, name: "name"},
+                    { id: 3, name: "name", female: "femail"},
+                    { id: 3, name: "name", female: "femail"},
+                    { id: 3, name: "name", female: "femail"},
+                    { id: 3, name: "name", female: "femail"},
+                    { id: 3, name: "name", female: "femail"},
+                    { id: 3, name: "name", female: "femail"},
+                    { id: 3, name: "name", female: "femail"},
+                    { id: 3, name: "name", female: "femail"},
+                    { id: 3, name: "name", female: "femail"},
+                    { id: 3, name: "name", female: "femail"},
+                    { id: 3, name: "name", female: "femail"},
+                ],
             };
         },
         created() {
@@ -110,15 +158,16 @@
 		        } else {
 			        console.log("init default stat")
 			        var stat = [
-				        ["sortBox",80147,102050], /*36700 100124; 60147 080324; 80000 290524*/
-				        ["checkBox",36700,102050], /*36700 100124; 60147 080324;*/
-				        ["renameImage",38218,560123], /*38218 100124; 64839 080324;*/ /*5601234 100124; 829000 080324; 1075000 290524*/
+				        ["shop",7,700], /*merch order*/
+				        ["news",20,200], /*post comment*/
+				        ["chat",150,300], /*user group*/
+				        ["database",5,2000], /*load storage*/
 				        ]
 		        }
 		        var imgLen = stat.length
 
 		        /*compute procent*/
-		        for (var i = 0; i < 3; i++) {
+                for (var i = 0; i < imgLen; i++) {
 			        var totalImage = stat[i][2]
 			        var renameImage = Math.floor(stat[i][1] / totalImage * 100)
 			        totalImage = 100 - renameImage
@@ -128,12 +177,12 @@
 			        totalFolder = 100 - renameFolder
 
 			        // redraw
-			       /* document.getElementsByClassName("circleWrapper")[i].innerHTML = ""
+			        document.getElementsByClassName("circleWrapper")[i].innerHTML = ""
 
-			        document.getElementsByClassName("circleWrapper")[i].innerHTML += '<div class="circle" style="background: radial-gradient(#525252 0, #525252 60px, transparent 0px, transparent 0%), conic-gradient(#00ffee94 0%, #00ffee '+renameImage+'%, #ff5e0099 '+renameImage+'%, #ff5e00 100%);"></div>'
+                    document.getElementsByClassName("circleWrapper")[i].innerHTML += '<div class="circle" style="background: radial-gradient(#52525200 0, #52525200 60px, transparent 0px, transparent 0%), conic-gradient(#00ffee2e 0%, #00ffee ' + renameImage +'%, #ff5e0024 '+renameImage+'%, #ff5e00 100%);"></div>'
 
-			        document.getElementsByClassName("circleWrapper")[i].innerHTML += '<a id="circleLegend1">'+renameImage+'</a><a id="circleLegend2">'+totalImage+'</a>' 
-		        */}
+                    document.getElementsByClassName("circleWrapper")[i].innerHTML += '<a id="circleLegend1">' + renameImage + '</a><a id="circleLegend2">' + totalImage + '</a><a id="circleLegend3">' + stat[i][0] + '</a>' 
+		        }
 	        },
 
             async asyncGetStatistic(){
@@ -176,20 +225,171 @@
 
 <style>
     .siem-stat-container {
-        height: 15em;
-        width: 50%;
-        background-color: red;
+        position: relative;
+        margin: 1em;
+        height: 16em;
+        background-color: #00000085;
+        overflow: hidden;
+        display: flex;
     }
     .siem-log-container {
+        padding: 1em;
+        white-space: pre-line;
+        margin: 1em;
         height: 15em;
-        width: 50%;
-        background-color: blue;
+        background-color: #00000085;
         overflow: scroll;
     }
-    .database-container { 
+    .database-container {
         height: 20em;
         width: 100%;
-        background-color: yellow;
+        background-color: #00000085;
+        padding: 1em;
+        white-space: pre-line;
+        overflow-y: scroll;
+        margin: 1em;
     }
-    
+
+    .circleWrapper {
+        position: relative;
+        padding: 10px;        
+    }
+    #circlenews {
+       /* background: radial-gradient(#52525200 0, #52525200 60px, transparent 0px, transparent 0%), conic-gradient(#00ffee2e 0%, #00ffee {{allpost}} %, #ff5e0024 {{allcomment}}%, #ff5e00 100%);*/
+    }
+    #circleshop {
+        /*background: radial-gradient(#52525200 0, #52525200 60px, transparent 0px, transparent 0%), conic-gradient(#00ffee2e 0%, #00ffee {{allorder}} %, #ff5e0024 {{allmerch}}%, #ff5e00 100%);*/
+    }
+    #circlechat {
+        /*background: radial-gradient(#52525200 0, #52525200 60px, transparent 0px, transparent 0%), conic-gradient(#00ffee2e 0%, #00ffee {{alluser}} %, #ff5e0024 {{allgroup}}%, #ff5e00 100%);*/
+    }
+    #circledatabse {
+        /*background: radial-gradient(#52525200 0, #52525200 60px, transparent 0px, transparent 0%), conic-gradient(#00ffee2e 0%, #00ffee {{}} %, #ff5e0024 {{}}%, #ff5e00 100%);*/
+    }
+
+
+    #boxCheck {
+        margin-left: 310px
+    }
+
+    #imageRename {
+        margin-left: 620px
+    }
+
+    #circleLegend1 {
+        position: absolute;
+        margin-top: -110px;
+        background-color: #00ffee;
+        margin-left: 120px;
+    }
+
+    #circleLegend2 {
+        position: absolute;
+        margin-top: -110px;
+        background-color: #ff5e00;
+        margin-left: 60px;
+    }
+
+    .circle {
+        width: 200px;
+        height: 200px;
+        border-radius: 200px;
+    }
+
+    .gistoWrapper {
+        height: 200px;
+        width: 820px;
+        position: absolute;
+        margin-top: 260px;
+        padding: 10px;
+        background-color: #525252;
+        box-shadow: 0px 0px 5px 5px grey;
+    }
+
+    .colWrapper {
+        height: 200px;
+        width: 100%;
+        position: absolute;
+        /*border: 1px solid #ccc;*/
+        display: flex;
+        align-items: flex-end;
+        font-size: 0.8em;
+    }
+
+    .barContainer {
+        width: 20px;
+    }
+
+    .bar1 {
+        width: 20px;
+        background-color: #ff6500d1;
+        position: absolute;
+        bottom: 0px;
+        z-index: 1;
+    }
+
+    .bar2 {
+        width: 20px;
+        background-color: #00f8ffd1;
+        position: absolute;
+        bottom: 0;
+        z-index: 2;
+    }
+
+    .bar3 {
+        width: 20px;
+        height: 10%;
+        background-color: #c700ff99;
+        position: absolute;
+        bottom: 0;
+        z-index: 3;
+    }
+
+    .gistoWorkWrapper {
+        height: 200px;
+        width: 820px;
+        position: absolute;
+        margin-top: 500px;
+        padding: 10px;
+        background-color: #525252;
+        box-shadow: 0px 0px 5px 5px grey;
+        overflow-y: hidden;
+        overflow-x: scroll;
+    }
+
+    .colWorkWrapper {
+        height: 200px;
+        position: absolute;
+        /*border: 1px solid #ccc;*/
+        display: flex;
+        align-items: flex-end;
+        font-size: 0.8em;
+    }
+
+    .barWorkContainer {
+        width: 20px;
+    }
+
+    .notifyWrapper {
+        height: 200px;
+        width: 820px;
+        position: absolute;
+        margin-top: 740px;
+        padding: 10px;
+        background-color: #525252;
+        box-shadow: 0px 0px 5px 5px grey;
+        font-size: 0.9em;
+        overflow-x: hidden;
+    }
+
+    .notifyMsg {
+        height: 20px;
+        width: 100%;
+        overflow: hidden;
+        margin: 0;
+    }
+    .databaseaction{
+        text-align: right;
+    }
+
 </style>

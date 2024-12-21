@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "Новый профиль",
+    "Projects": [
+      {
+        "Path": "steadyforum.Server\\steadyforum.Server.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "steadyforum.client\\steadyforum.client.esproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

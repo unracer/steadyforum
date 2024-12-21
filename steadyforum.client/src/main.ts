@@ -14,6 +14,7 @@ import thelogin from './components/thelogin.vue';
 import controllpage from './components/controllpage.vue';
 import slideritem from './components/slideritem.vue'
 
+
 const routes = [
     {
         path: '/',

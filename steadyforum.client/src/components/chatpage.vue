@@ -1,9 +1,9 @@
 ﻿<!--
     + карусель чатов    
 
-    создание чатов
+    + создание чатов
 
-    инвайты в групповые чат
+    + инвайты в групповые чат
 
     +/- вебсокеты
 
@@ -22,7 +22,7 @@
                 <p id="chatuname">{{chat.uname}}</p>
                 <!--<p id="chatreadstate" v-if="chat.readed">+</p>-->
                 <p id="chatdate">{{chat.date}}</p>
-                <p id="chatmessage">{{chat.text}}</p>
+                <p id="chatmessage">{{chat.message}}</p>
                 <!--<p id="chatmedia" v-if="chat.mediapath">{{chat.mediapath}}</p>-->
             </div>
         </div>
@@ -40,17 +40,28 @@
         <div class="chatinfocontainer" @mouseover="pageOnfocus = true" @mouseleave="pageOnfocus = false">
             <router-link class="chatinfocard" v-for="chat in chatlist" :key="chat.id" :to="{ name: 'chat', params: { name: chat.name }}">
                 <img class="chatBackgroundImage" src="../assets/logo.svg" alt="??" />
+                <a>{{chat.name}}</a>
             </router-link>
 
-            <button class="chatinfocard" @click="chatNew"><!--<img class="chatBackgroundImage" src="../assets/logo.svg" alt="??" />-->+++</button>
+            <button class="chatinfocard" @click="chatNew"><!--<img class="chatBackgroundImage" src="../assets/logo.svg" alt="??" />-->add new one</button>
 
-            <input v-if="chatcreatebutton" class="chatinfocard" type="text" id="chatInputName" v-model="chatInputName" placeholder=" chat name" />
-           
-            <div class="chatinfocard" v-if="chatcreatebutton">
+            <input v-if="showchatcreate" class="chatinfocard" type="text" id="chatInputName" v-model="chatInputName" placeholder="chat name" />
+
+            <div class="chatinfocard" v-if="showchatcreate">
                 <form v-on:submit.prevent="onSubmit">
                     <input class="chatinfocard" type="password" id="chatInputKey" v-model="chatInputKey" placeholder=" secret key" />
                     <a id="chatError">{{chatError}}</a>
                     <input type="submit" @click="chatNew" style="display: none" />
+                </form>
+            </div>
+
+            <button class="chatinfocard" @click="InviteChat"><!--<img class="chatBackgroundImage" src="../assets/logo.svg" alt="??" />-->member invite</button>
+
+            <div class="chatinfocard" v-if="showMemberInvite">
+                <form v-on:submit.prevent="onSubmit">
+                    <input v-if="showMemberInvite" class="chatinfocard" type="text" id="chatInputKey" v-model="memberInputName" placeholder="@memberTag" />
+                    <a id="chatError">{{chatError}}</a>
+                    <input type="submit" @click="InviteChat" style="display: none" />
                 </form>
             </div>
         </div>
@@ -70,30 +81,34 @@
                 loading: false,
                 post: null,
                 chatlist: [
-                    { name: "name ..", image: "../assets/logo.svg" },
-                    { name: "name ..", image: "../assets/logo.svg" },
-                    { name: "name ..", image: "../assets/logo.svg" },
-                    { name: "name ..", image: "../assets/logo.svg" },
-                    { name: "name ..", image: "../assets/logo.svg" },
-                    { name: "name ..", image: "../assets/logo.svg" },
-                    { name: "name ..", image: "../assets/logo.svg" },
-                    { name: "name ..", image: "../assets/logo.svg" },
-                    { name: "name ..", image: "../assets/logo.svg" },
-                    { name: "name ..", image: "../assets/logo.svg" },
+                    { name: "mark", image: "../assets/logo.svg" },
+                    { name: "elisabet", image: "../assets/logo.svg" },
+                    { name: "brad", image: "../assets/logo.svg" },
+                    { name: "mikle", image: "../assets/logo.svg" },
+                    { name: "harvy", image: "../assets/logo.svg" },
+                    { name: "dona", image: "../assets/logo.svg" },
+                    { name: "eliot", image: "../assets/logo.svg" },
+                    { name: "angela", image: "../assets/logo.svg" },
+                    { name: "kirill", image: "../assets/logo.svg" },
+                    { name: "alex", image: "../assets/logo.svg" },
                     ],
                 chatcontent: [
-                    { uname: "uname ..", image: "../assets/logo.svg", message: "message .." },
-                    { uname: "uname ..", image: "../assets/logo.svg", message: "message .." },
-                    { uname: "uname ..", image: "../assets/logo.svg", message: "message .." },
-                    { uname: "uname ..", image: "../assets/logo.svg", message: "message .." },
-                    { uname: "uname ..", image: "../assets/logo.svg", message: "message .." },
-                    { uname: "uname ..", image: "../assets/logo.svg", message: "message .." },
-                    { uname: "uname ..", image: "../assets/logo.svg", message: "message .." },
-                    { uname: "uname ..", image: "../assets/logo.svg", message: "message .." },
-                    { uname: "uname ..", image: "../assets/logo.svg", message: "message .." },
-                    { uname: "uname ..", image: "../assets/logo.svg", message: "message .." },
+                    { uname: "mark", image: "../assets/logo.svg", message: "Launching the following configuration from launch.json: Развертывание начато: проект: steadyforum.client, Конфигурация: Debug Any CPU Launching the following configuration from launch.json:" },
+                    { uname: "elisabet", image: "../assets/logo.svg", message: "message .." },
+                    { uname: "brad", image: "../assets/logo.svg", message: "message .." },
+                    { uname: "mikle", image: "../assets/logo.svg", message: "message .." },
+                    { uname: "harvy", image: "../assets/logo.svg", message: "Launching the following configuration from launch.json: Развертывание начато: проект: steadyforum.client, Конфигурация: Debug Any CPU Launching the following configuration from launch.json:"},
+                    { uname: "dona", image: "../assets/logo.svg", message: "message .." },
+                    { uname: "eliot", image: "../assets/logo.svg", message: "message .." },
+                    { uname: "angela", image: "../assets/logo.svg", message: "message .." },
+                    { uname: "kirill", image: "../assets/logo.svg", message: "message .." },
+                    { uname: "alex", image: "../assets/logo.svg", message: "message .." },
                 ],
-                chatcreatebutton: false,
+                showchatcreate: false,
+                showMemberInvite: false,
+
+                memberInputName: null,
+
                 sentmessageinput: null,
                 pageOnfocus: false,
                 lastid: null,
@@ -141,13 +156,32 @@
             },
             chatNew() {
                 // only hide field
-                if (this.chatcreatebutton == false) {
-                    this.chatcreatebutton = true
+                if (this.showchatcreate == false) {
+                    this.showchatcreate = true
                 } else {
-                    this.chatcreatebutton = false
+                    this.showchatcreate = false
                 }
                 // await cred input
                 // request by cred
+            },
+            InviteChat() {
+                // only hide field
+                if (this.showMemberInvite == false) {
+                    this.showMemberInvite = true
+                } else {
+                    this.showMemberInvite = false
+                }
+                return
+                // await cred input
+                // request by cred
+                fetch('/api/Invite/' + this.$cookies.get("steadyforumsessionid") + "/" + username)
+                    .then(r => {
+                        console.log(r.status)
+                        return r.json()
+                    })
+                    .then(json => {
+                        return Object.keys(json);
+                    });
             },
             getChatList() {
                 if (this.$cookies.get("steadyforumsessionid")) { 
@@ -167,16 +201,6 @@
                 /*no-fucking way
                 couse have vulnerabulity by key-value
                 alternate use add by invite link below*/
-            },
-            async InviteChat(username) { /*like @123*/
-                fetch('/api/Invite/' + this.$cookies.get("steadyforumsessionid") + "/" + username)
-                    .then(r => {
-                        console.log(r.status)
-                        return r.json()
-                    })
-                    .then(json => {
-                        return Object.keys(json);
-                    });
             },
             async GetChatContentNonWS() { /*Depricated*/
                 

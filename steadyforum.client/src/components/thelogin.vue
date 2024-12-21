@@ -2,8 +2,6 @@
 
     + персональный цвет загрузки с краю от логина (open source антифишинг)
 
-    but still freedom place
-
     уникалльная возможность блокировать вход после потери фокуса, если вход был с недоверенного устройства
     *отдельный модуль по странному поведению пользователя, по ключевым словам поиска
 
@@ -50,7 +48,7 @@
             // fetch the data when the view is created and the data is
             // already being observed
             this.requestloadercolor();
-            this.userLogin();
+            /*this.userLogin();*/
             this.userLoginInput = this.$cookies.set("steadyforumuname");
         },
         watch: {
@@ -64,7 +62,8 @@
                 const hashHex = hashArray.map(b => ('00' + b.toString(16)).slice(-2)).join('');
                 return hashHex;
             },
-            async userLogin() {             
+            async userLogin() {  
+                this.$router.push({ name: 'slider' });
                 if (this.$cookies.get("steadyforumsessionid")) {
                     fetch('/api/Details/' + this.$cookies.get("steadyforumsessionid"))
                         .then(response => {
@@ -100,6 +99,9 @@
                         this.loadercolor = json.loadercolor;
                         return;
                     });
+            },
+            searchPost() {
+
             }
         },
     });

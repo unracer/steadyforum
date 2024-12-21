@@ -1,9 +1,9 @@
 ﻿<!--
     + карусель товаров
 
-    кравлер по сайтам товаров
+    +/- кравлер по сайтам товаров
 
-    подсказки гугл для поиска
+    + подсказки гугл для поиска
 
     + активные заказы
 
@@ -164,13 +164,6 @@
                 // get new session id
                 // set cookie
             },
-            predictWords() {
-
-            },
-            userinput() {
-
-
-            },
             async runPaymentSystem(id, action) {
                 if (id == null && action == null) {
                     /*just sent to database and our personal can sent using himself account of 5post*/
@@ -223,8 +216,34 @@
                 console.Log("called runPaymentSystem")
             },
             predictPast(title) {
+                /*https://github.com/eugeneware/suggestion?ysclid=m4trjypl4t287222676 */
+                /*$ npm install suggestion*/
+
+                /*var suggest = require('suggestion');
+                suggest('dog training', function (err, suggestions) {
+                    if (err) throw err;
+                    console.log(suggestions);
+                })*/
+
                 this.sentmessageinput += " " + title;
             },
+            crawleeUserSearch() {
+                this.sentmessageinput
+
+                fetch('/api/CrawlleUserSearch/' + this.sentmessageinput)
+                    .then(r => {
+                        if (r.status == 200) {
+                            console.log(r.status)
+                        } 
+                        return r.json()
+                    })
+                    .then(json => {
+                        /* this.chatlist = json as Forecasts;*/
+                        this.shopcarousellist = json;
+                        return;
+                    });
+
+            }
         },
     });
 </script>

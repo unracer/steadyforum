@@ -13,7 +13,7 @@
 <style scope>
     #data-v-app, #app {
         margin: 0;
-        padding: 0;
+        padding: 1em;
         width: 100%;
         height: 100%;
     }
