@@ -81,6 +81,7 @@
                 var userCredBase64 = btoa(unescape(encodeURIComponent(this.userLoginInput + this.userPasswordInput)));
                 var userCredSha256 = await this.sha256(userCredBase64)
 
+
                 fetch('/api/Login/' + this.userLoginInput + "/" + userCredSha256)
                     .then(r => r.json())
                     .then(json => {
