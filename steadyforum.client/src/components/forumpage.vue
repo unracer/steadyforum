@@ -7,7 +7,7 @@
 
         + справа в углу кнопка озвучивания текста (заебался читать) ии, на бэкграунде избранные сообщения комментаторов
 
-        + коменты как в вк
+        + коменты как в вк 
         -->
     <div v-if="loading"> 
         Loading... Please  <a href="https://mrdoob.com/projects/chromeexperiments/google-gravity/">play with me</a> for more fun.

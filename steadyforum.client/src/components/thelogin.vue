@@ -17,7 +17,7 @@
         <div class="loader" >
             <div class="inner one" style="border-bottom: 3px solid {{loadercolor}};"></div>
             <div class="inner two" style="border-right: 3px solid {{loadercolor}}; "></div>
-            <div class="inner three" style="border-top: 3px solid {{loadercolor}};"></div>
+            <div class="inner three" style="border-top: 3px solid {{loadercolor}};"></div> 
         </div>
 
         <br>
