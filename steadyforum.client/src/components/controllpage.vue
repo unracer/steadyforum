@@ -1,4 +1,29 @@
-﻿<template >
+﻿<!--
+ADD README 
+    crm 
+    smart-contract
+
+-->
+
+<template >
+    <div class="tabs">
+        <router-link class="tab-entity" :to="{ name: 'chat', params: { name: chat.name }}">            
+            <a>db</a>
+        </router-link>
+        <router-link class="tab-entity" :to="{ name: 'chat', params: { name: chat.name }}">            
+            <a>doc</a>
+        </router-link>
+        <router-link class="tab-entity" :to="{ name: 'chat', params: { name: chat.name }}">            
+            <a>analytic</a>
+        </router-link>
+        <router-link class="tab-entity" :to="{ name: 'chat', params: { name: chat.name }}">            
+            <a>workers</a>
+        </router-link>
+        <router-link class="tab-entity" :to="{ name: 'chat', params: { name: chat.name }}">            
+            <a>event</a>
+        </router-link>
+    </div>
+
     <div class="siem-stat-container">
 
         <div class="circleWrapper" id="circleshop">
@@ -391,5 +416,35 @@
     .databaseaction{
         text-align: right;
     }
+
+    /*tabs*/
+
+    .tab-entity:not(:first-child) {
+        margin-left: -50px;
+    }
+
+    .tab-entity:hover {
+        transform: translateY(-20px);
+        transition: 0.4s ease-out;
+    }
+
+        .tab-entity:hover ~ .tab-entity {
+            position: relative;
+            left: 50px;
+            transition: 0.4s ease-out;
+        }
+
+
+
+        .tab-entity:hover .filledbar {
+            width: 120px;
+            transition: 0.4s ease-out;
+        }
+
+
+        .tab-entity:hover .stroke {
+            stroke-dashoffset: 100;
+            transition: 0.6s ease-out;
+        }
 
 </style>
