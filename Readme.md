@@ -10,6 +10,8 @@ https://github.com/user-attachments/assets/52c43e25-1459-42db-a640-4f132e25b15a
 # devops
 - .. progress
 # deploy
+- go > setting > server as first client as second only start with debug bouth > dependency client > config client as first bouth arrow server second
+# setup from zero to hero
 - if u have PROBLEM WITH VISUAL STUDIO SPA ASP.NET VUE.JS ENTITYFRAMEWORK MIGRATIONS VUE-ROUTE WEB-SOCKET HTTP-REQUEST see how to deploy step by step
     
 solution > entityframeworkcore > mark for server > install  
