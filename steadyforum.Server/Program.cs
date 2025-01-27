@@ -15,11 +15,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c => { c.SwaggerDoc("v2", new OpenApiInfo { Title = "MVCCallWebAPI", Version = "v2" });});
 
 builder.Services.AddTransient<NewsBrowser>();
-/*
-builder.Services.AddTransient<NewsBrowser>();
-builder.Services.AddTransient<INewsBrowser, DorkBrowser>();
-builder.Services.AddTransient<INewsBrowser, StockBrowser>();
-*/
+
+//builder.Services.AddTransient<NewsBrowser>();
+//builder.Services.AddTransient<INewsBrowser, DorkBrowser>();
+//builder.Services.AddTransient<INewsBrowser, StockBrowser>();
+
 
 var app = builder.Build();
 
@@ -35,8 +35,8 @@ if (app.Environment.IsDevelopment())
 
 // middleware
 
-System.Diagnostics.Process.Start("dotnet add package Microsoft.EntityFrameworkCore.SqlServer");
-System.Diagnostics.Process.Start("Install-Package Microsoft.EntityFrameworkCore.SqlServer");
+//System.Diagnostics.Process.Start("dotnet add package Microsoft.EntityFrameworkCore.SqlServer");
+//System.Diagnostics.Process.Start("Install-Package Microsoft.EntityFrameworkCore.SqlServer");
 
 app.UseWebSockets();
 

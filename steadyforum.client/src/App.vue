@@ -1,7 +1,7 @@
 <script setup lang="ts">
-    import thelogin from './components/thelogin.vue'
-    import slideritem from './components/slideritem.vue'
-    import controllpage from './components/controllpage.vue'
+    import thelogin from './components/the-login.vue'
+    import slideritem from './components/slider-item.vue'
+    import controllpage from './components/erppage.vue'
 
 </script>
 

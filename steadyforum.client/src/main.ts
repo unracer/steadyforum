@@ -7,12 +7,9 @@ import * as VueRouter from 'vue-router'
 import VueCookies from 'vue-cookies';
 import App from './App.vue'
 
-import forumpage from './components/forumpage.vue';
-import chatpage from './components/chatpage.vue';
-import shoppage from './components/shoppage.vue';
-import thelogin from './components/thelogin.vue';
-import controllpage from './components/controllpage.vue';
-import slideritem from './components/slideritem.vue'
+import thelogin from './components/the-login.vue';
+import controllpage from './components/erp-page.vue';
+import slideritem from './components/slider-item.vue'
 
 
 const routes = [

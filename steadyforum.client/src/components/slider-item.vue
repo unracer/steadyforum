@@ -1,7 +1,8 @@
 <script setup lang="ts">
-    import forumpage from './forumpage.vue'
-    import chatpage from './chatpage.vue'
-    import shoppage from './shoppage.vue'
+    import forumpage from './forum-page.vue'
+    import chatpage from './chat-page.vue'
+    import shoppage from './shop-page.vue'
+    import erppage from './erp-page.vue'
 </script>
 
 <template>
@@ -18,6 +19,9 @@
             </label>
             <label class="slidercard" for="item-3" id="slidershopcard">
                 <shoppage /> 
+            </label>
+            <label class="slidercard" for="item-4" id="sliderERPCard">
+                <erppage /> 
             </label>
         </div>
         <div class="player">
@@ -176,6 +180,7 @@
         object-fit: cover;
     }
 
+/*доделать четверту.ю страницу*/
     #item-1:checked ~ .slidercards #slidershopcard, #item-2:checked ~ .slidercards #sliderforumcard, #item-3:checked ~ .slidercards #sliderchatcard {
         transform: translateX(-40%) scale(.8);
         opacity: .4;
@@ -190,6 +195,11 @@
         filter: blur(5px);
     }
 
+    #item-1:checked ~ .slidercards #sliderforumcard, #item-2:checked ~ .slidercards #sliderchatcard, #item-3:checked ~ .slidercards #slidershopcard {
+        transform: translateX(0) scale(1);
+        opacity: 1;
+        z-index: 1;
+    } 
     #item-1:checked ~ .slidercards #sliderforumcard, #item-2:checked ~ .slidercards #sliderchatcard, #item-3:checked ~ .slidercards #slidershopcard {
         transform: translateX(0) scale(1);
         opacity: 1;
@@ -289,6 +299,9 @@
 
     #item-3:checked ~ .player #test {
         transform: translateY(-80px);
+    }
+    #item-4:checked ~ .player #test {
+        transform: translateY(-120px);
     }
 
     #sliderforumcard {

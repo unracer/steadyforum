@@ -25,23 +25,23 @@ namespace steadyforum.Server.Controllers
         }
 
         // GET: Chat/Details/5
-        /*[HttpGet]
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //[HttpGet]
+        //public async Task<IActionResult> Details(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var chat = await _context.Chat
-                .FirstOrDefaultAsync(m => m.id == id);
-            if (chat == null)
-            {
-                return NotFound();
-            }
+        //    var chat = await _context.Chat
+        //        .FirstOrDefaultAsync(m => m.id == id);
+        //    if (chat == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(chat);
-        }*/
+        //    return View(chat);
+        //}
 
         // POST: Chat/List
         [HttpGet("List/{sessionid}")]
@@ -62,8 +62,7 @@ namespace steadyforum.Server.Controllers
             return Ok("[ " + (Regex.Replace(user.Chatlist, @"\W+key\W+\w+", "")) + " ]");
         }
 
-        // POST: Chat/ContentOldApi
-        /*Non web socket*/
+        // POST: Chat/ContentOldApi Non web socket
         [HttpGet("Content/{sessionid}/{chatname}/{lastmessage}")]
         public async Task<IActionResult> GetChatContentNonWS(string sessionid, string chatname, int lastmessage)
         {
@@ -185,37 +184,37 @@ namespace steadyforum.Server.Controllers
             {
                 trackedChat.Chatname = createdchat.Chatname;
                 trackedChat.Passwordhash = createdchat.Passwordhash;
-                /*trackedChat.Userlist = createdchat.Userlist + ",{\"uname\":\"" + user.Uname + "\"}";*/ // <space> for sec. bypass
+                //trackedChat.Userlist = createdchat.Userlist + ",{\"uname\":\"" + user.Uname + "\"}"; // <space> for sec. bypass
                 trackedChat.Userlist = user.Uname + " , "; // <space> for sec. bypass
                 trackedChat.Idcontent = createdchat.Idcontent;
                 _context.SaveChanges();
             }
 
-            /*if (ModelState.IsValid)
-            {
-                _context.Add(chat);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }*/
+            //if (ModelState.IsValid)
+            //{
+            //    _context.Add(chat);
+            //    await _context.SaveChangesAsync();
+            //    return RedirectToAction(nameof(Index));
+            //}
             return Ok(createdchat);
         }
 
         // GET: Chat/Edit/5
-        /* [HttpGet]
-         public async Task<IActionResult> Edit(int? id)
-         {
-             if (id == null)
-             {
-                 return NotFound();
-             }
+        //[HttpGet]
+        //public async Task<IActionResult> Edit(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-             var chat = await _context.Chat.FindAsync(id);
-             if (chat == null)
-             {
-                 return NotFound();
-             }
-             return View(chat);
-         }*/
+        //    var chat = await _context.Chat.FindAsync(id);
+        //    if (chat == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return View(chat);
+        //}
 
         // POST: Chat/Edit/5 /*Non web socket*/
         [HttpPost("Content/{sessionid}/{chatname}")]
@@ -223,7 +222,8 @@ namespace steadyforum.Server.Controllers
         {
             if (!ModelState.IsValid) { return BadRequest(); }
 
-            try {
+            try
+            {
                 // check access
                 var user = await _context
                     .User
@@ -247,13 +247,14 @@ namespace steadyforum.Server.Controllers
                    .FirstOrDefaultAsync();
                 if (chatidcontent == null) { return Problem(); }
 
-                /* sanitaze mediapath */
+                //sanitaze mediapath
                 if (Mediapath == "null")
                 {
                     Mediapath = null;
                 }
 
-                _context.Chatcontent.Add(new Chatcontent {
+                _context.Chatcontent.Add(new Chatcontent
+                {
                     Idcontent = chatidcontent.Idcontent,
                     Readed = null,
                     Date = new DateOnly(),
@@ -278,59 +279,59 @@ namespace steadyforum.Server.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                /*if (!ChatExists(chatcontent.id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }*/
+                //if (!ChatExists(chatcontent.id))
+                //{
+                //    return NotFound();
+                //}
+                //else
+                //{
+                //    throw;
+                //}
             }
             return Ok();
         }
 
-        private readonly ChatWebSocketHandler _webSocketHandler;
+        //private readonly ChatWebSocketHandler _webSocketHandler;
 
-        public Take(ChatWebSocketHandler webSocketHandler)
-        {
-            _webSocketHandler = webSocketHandler;
-        }
+        //public Take(ChatWebSocketHandler webSocketHandler)
+        //{
+        //    _webSocketHandler = webSocketHandler;
+        //}
 
         // POST: Chat/Edit/5 /*Non web socket*/
-        [HttpPost("Content/{sessionid}/{chatname}")]
-        public async Task<IActionResult> ChatWS(string sessionid, string chatname) /* ? how encrypt message*/
-        {
-            if (!ModelState.IsValid) { return BadRequest(); }
+        //[HttpGet("Content/{sessionid}/{chatname}")]
+        //public async Task<IActionResult> ChatWS(string sessionid, string chatname) /* ? how encrypt message*/
+        //{
+        //    if (!ModelState.IsValid) { return BadRequest(); }
 
-            // check access
-            var user = await _context
-                .User
-                .Where(s => s.Sessionid == sessionid)
-                .FirstOrDefaultAsync();
-            if (user == null || user.Chatlist == null) { return BadRequest(" expired session "); }
+        //    // check access
+        //    var user = await _context
+        //        .User
+        //        .Where(s => s.Sessionid == sessionid)
+        //        .FirstOrDefaultAsync();
+        //    if (user == null || user.Chatlist == null) { return BadRequest(" expired session "); }
 
-            var chat = await _context
-                .Chat
-                .Where(s => s.Chatname == chatname)
-                .FirstOrDefaultAsync();
-            if (chat == null || chat.Userlist == null || user.Uname == null) { return BadRequest("{ \"status\" : \"denied chat or not exist ;)\"} "); }
+        //    var chat = await _context
+        //        .Chat
+        //        .Where(s => s.Chatname == chatname)
+        //        .FirstOrDefaultAsync();
+        //    if (chat == null || chat.Userlist == null || user.Uname == null) { return BadRequest("{ \"status\" : \"denied chat or not exist ;)\"} "); }
 
-            if (!user.Chatlist.Contains(chatname)) { return Problem("{ \"status\" : \"denied, click <create chat> and login to chat again or call admin\"} "); }
-            if (!chat.Userlist.Contains(user.Uname)) { return Problem("{ \"status\" : \"denied, click <create chat> and login to chat again or call admin\"} "); }
+        //    if (!user.Chatlist.Contains(chatname)) { return Problem("{ \"status\" : \"denied, click <create chat> and login to chat again or call admin\"} "); }
+        //    if (!chat.Userlist.Contains(user.Uname)) { return Problem("{ \"status\" : \"denied, click <create chat> and login to chat again or call admin\"} "); }
 
-            //preperation
+        //    //preperation
 
-            if (!HttpContext.WebSockets.IsWebSocketRequest)
-            {
-                return BadRequest("Websocket is not support");                
-            }
+        //    if (!HttpContext.WebSockets.IsWebSocketRequest)
+        //    {
+        //        return BadRequest("Websocket is not support");                
+        //    }
 
-            /*filter socket by chatname for broadcast*/
-            var webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
-            await _webSocketHandler.HandlerWebSocket(HttpContext, webSocket, chatname);
+        //    /*filter socket by chatname for broadcast*/
+        //    var webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
+        //    await _webSocketHandler.HandlerWebSocket(HttpContext, webSocket, chatname);
 
-            return Ok("closed");
-        }
+        //    return Ok("closed");
+        //}
     }
 }
