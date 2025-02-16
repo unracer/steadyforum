@@ -1,24 +1,33 @@
 ﻿<!-- ADD README
     crm
-    smart-contract
-
+    smart-contract event
+    ERP system with git integration to download a new PLC release, to change the manufacture specification
 -->
 
 <template>
-    <div class="tabs">
-        <router-link class="tab-entity" :to="{ name: 'chat', params: { name: chat.name }}">
+    <div class="tabs chatgroupcontainer">
+        <router-link class="tab-entity" :to="{ name: 'slider'}">
+            <img class="chatBackgroundImage" src="../assets/logo.svg" alt="??" />
+            <a>home</a>
+        </router-link>
+        <router-link class="tab-entity" :to="{ name: 'controll', params: { sessionId: 'db' }}">
+            <img class="chatBackgroundImage" src="../assets/logo.svg" alt="??" />
             <a>db</a>
         </router-link>
-        <router-link class="tab-entity" :to="{ name: 'chat', params: { name: chat.name }}">
+        <router-link class="tab-entity" :to="{ name: 'controll', params: { sessionId: 'doc' }}">
+            <img class="chatBackgroundImage" src="../assets/logo.svg" alt="??" />
             <a>doc</a>
         </router-link>
-        <router-link class="tab-entity" :to="{ name: 'chat', params: { name: chat.name }}">
+        <router-link class="tab-entity" :to="{ name: 'controll', params: { sessionId: 'analytic' }}">
+            <img class="chatBackgroundImage" src="../assets/logo.svg" alt="??" />
             <a>analytic</a>
         </router-link>
-        <router-link class="tab-entity" :to="{ name: 'chat', params: { name: chat.name }}">
+        <router-link class="tab-entity" :to="{ name: 'controll', params: { sessionId: 'workers' }}">
+            <img class="chatBackgroundImage" src="../assets/logo.svg" alt="??" />
             <a>workers</a>
         </router-link>
-        <router-link class="tab-entity" :to="{ name: 'chat', params: { name: chat.name }}">
+        <router-link class="tab-entity" :to="{ name: 'controll', params: { sessionId: 'event' }}">
+            <img class="chatBackgroundImage" src="../assets/logo.svg" alt="??" />
             <a>event</a>
         </router-link>
     </div>
@@ -74,15 +83,37 @@
 
         <input v-for="entity in editRowDatabase_1[0]" :key="entity.id"
                id="newRowDatabase" type="text" :placeholder="entity" />
-        <button id="saveNewRow" v-on:click="() => saveNewRow()">save new row</button>
-        <button id="deleteNewRow" v-on:click="() => deleteNewRow()">clear field</button><br /><br />
+        <button id="saveNewRow" v-on:click="() => saveNewRow()" style="color:green">save new row</button>
+        <button id="deleteNewRow" v-on:click="() => deleteNewRow()" style="color:red">clear field</button><br /><br />
 
         <div class="dataTable">
             <div v-for="row in editRowDatabase_1" :key="row.id">
                 <input id="editRowDatabase" type="text"
                        v-for="entity in row" :key="entity.id" :placeholder="entity" :value="entity" />
-                <button class="databaseaction" v-on:click="() => saveNewRow()">save</button>
-                <button class="databaseaction" v-on:click="() => deleteNewRow()">delete</button>
+                <button class="databaseaction" v-on:click="() => saveNewRow()" style="color:green">save</button>
+                <button class="databaseaction" v-on:click="() => deleteNewRow()" style="color:red">delete</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="scada-map-container">
+        <!--image in map role-->
+        <img class="scada-map-background-image" src="../assets/scada-template-map.png" alt="image: scada-template-map" />
+
+        <!--params-->
+        <div class="plc-container">
+            <div class="plc-scope"
+                 v-for="plc in plcData" :key="plc.id">
+                <!-- id need for position-->
+                <button id="plc-action-{{plc.id}}"
+                        v-for="action in plc" :key="action.type" :value="arg.value" :click="execute-plc-action(plc.id, plc.action)" />
+            </div>
+
+            <!-- id need for position-->
+            <div class="plc-data-{{plc.id}}"
+                 v-for="plc in plcData" :key="plc.id">
+                <input id="plc-arg" type="text"
+                       v-for="arg in plc" :key="arg.name" :placeholder="arg" :value="arg.value" />
             </div>
         </div>
     </div>
@@ -202,7 +233,7 @@
                     totalFolder = 100 - renameFolder
 
                     // redraw
-                    document.getElementsByClassName("circleWrapper")[i].innerHTML = ""
+                    document.getElementsByClassName("circleWrapper")[i].innerHTML = " "
 
                     document.getElementsByClassName("circleWrapper")[i].innerHTML += '<div class="circle" style="background: radial-gradient(#52525200 0, #52525200 60px, transparent 0px, transparent 0%), conic-gradient(#00ffee2e 0%, #00ffee ' + renameImage + '%, #ff5e0024 ' + renameImage + '%, #ff5e00 100%);"></div>'
 
@@ -446,5 +477,30 @@
             stroke-dashoffset: 100;
             transition: 0.6s ease-out;
         }
+
+    .chatgroupcontainer {
+        top: 60px;
+        left: calc(50% - 300px);
+        display: flex;
+    }
+    .tab-entity {
+        display: flex;
+        height: 50px;
+        width: 100px;
+        background-color: #17141d;
+        border-radius: 10px;
+        box-shadow: -1rem 0 3rem #0000007a;
+        /*   margin-left: -50px; */
+        transition: 0.4s ease-out;
+        position: relative;
+        left: 0px;
+        color: #2c3e50;
+    }
+
+    .scada-map-background-image {
+         width: 100em;
+        padding: 1em;
+        margin: 1em;
+    }
 
 </style>

@@ -7,9 +7,10 @@
 
 <template>
     <div class="slidercontainer">
-        <input type="radio" name="slider" id="item-1">
+        <input type="radio" name="slider" id="item-1" checked>
         <input type="radio" name="slider" id="item-2" >
-        <input type="radio" name="slider" id="item-3" checked>
+        <input type="radio" name="slider" id="item-3" >
+        <input type="radio" name="slider" id="item-4" >
         <div class="slidercards">
             <label class="slidercard" for="item-1" id="sliderforumcard"> <!--what for - check delete id for this-->
                 <forumpage />
@@ -20,7 +21,7 @@
             <label class="slidercard" for="item-3" id="slidershopcard">
                 <shoppage /> 
             </label>
-            <label class="slidercard" for="item-4" id="sliderERPCard">
+            <label class="slidercard" for="item-4" id="slidererpcard">
                 <erppage /> 
             </label>
         </div>

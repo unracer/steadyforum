@@ -47,7 +47,7 @@
         created() {
             // fetch the data when the view is created and the data is
             // already being observed
-            this.requestloadercolor();
+            //this.requestloadercolor();
             /*this.userLogin();*/
             this.userLoginInput = this.$cookies.set("steadyforumuname");
         },

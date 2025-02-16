@@ -37,7 +37,7 @@
             </form>
         </div>
 
-        <div class="chatinfocontainer" @mouseover="pageOnfocus = true" @mouseleave="pageOnfocus = false">
+        <div class="chatgroupcontainer" @mouseover="pageOnfocus = true" @mouseleave="pageOnfocus = false">
             <router-link class="chatinfocard" v-for="chat in chatlist" :key="chat.id" :to="{ name: 'chat', params: { name: chat.name }}">
                 <img class="chatBackgroundImage" src="../assets/logo.svg" alt="??" />
                 <a>{{chat.name}}</a>
@@ -457,7 +457,7 @@
         /*border-radius: 10px;*/
     }
 
-    .chatinfocontainer {
+    .chatgroupcontainer {
         top: 60px;
         left: calc(50% - 300px);
         display: flex;

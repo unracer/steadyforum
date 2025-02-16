@@ -3,11 +3,11 @@
     "Name": "Новый профиль",
     "Projects": [
       {
-        "Path": "steadyforum.Server\\steadyforum.Server.csproj",
+        "Path": "steadyforum.client\\steadyforum.client.esproj",
         "Action": "Start"
       },
       {
-        "Path": "steadyforum.client\\steadyforum.client.esproj",
+        "Path": "steadyforum.Server\\steadyforum.Server.csproj",
         "Action": "Start"
       }
     ]
