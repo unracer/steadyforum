@@ -1,33 +1,32 @@
 ﻿using System.Collections.ObjectModel;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
-
-public class NewsBrowser : INewsBrowser
+using steadyforum.Server.Model;
+public class NewsCrawler : INewsCrawler
 {
-    public string Title { get; set; }
-    public string Content { get; set; }
-    public string Tag { get; set; }
-    public string Mediapath { get; set; }
-    public string Reference { get; set; }
-
-    public int TakeNews()
+    public int searchTelegramNews()
     {
         /*pre set*/
 
-        Collection<string> keywords = new Collection<string>() { "hack group" };
-        Collection<string> recource = new Collection<string>() { "https://www.securitylab.ru/", "https://t.me/s/SecLabNews" };
-        string telegramToken = "";
+        Collection<string> keyWord = new Collection<string>() { "hack group" };
+        Collection<string> newsTelegrammRecource = new Collection<string>() { "https://www.securitylab.ru/", "https://t.me/s/SecLabNews" };
+        string telegrammToken = "";
         int newsCounter = 0;
 
-        foreach (var link in recource)
+        foreach (var newsLink in newsTelegrammRecource)
         {
 
             /*request*/
 
             /*sample*/
 
-            /*generade media*/
+            /*generade background gif*/
 
-            /*past db*/
+            /*insert db used News DTO*/
+
+            new News
+            {
+
+            };
         }
 
         return newsCounter;
